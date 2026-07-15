@@ -1,37 +1,37 @@
-# Orion CLI - Agentes
+# Orion CLI - Agents
 
-> Guia completo dos agentes especializados do sistema multi-agente.
+> Complete guide to the specialized agents in the multi-agent system.
 
-## Filosofia
+## Philosophy
 
-A CLI não será um agente. Ela será um **orquestrador**. Cada agente será especialista em apenas uma responsabilidade. Isso aproxima o fluxo de trabalho de uma equipe real de engenharia.
+The CLI is not an agent. It is an **orchestrator**. Each agent is a specialist in only one responsibility. This brings the workflow closer to a real engineering team.
 
 ---
 
-## Hierarquia de Agentes
+## Agent Hierarchy
 
 ```
 Orchestrator
     │
-    ├── Planner Agent (planejamento)
+    ├── Planner Agent (planning)
     │
-    ├── Architect Agent (arquitetura)
+    ├── Architect Agent (architecture)
     │
-    ├── Agentes de Implementação
+    ├── Implementation Agents
     │   ├── Backend Agent
     │   ├── Database Agent
     │   └── Frontend Agent
     │
-    ├── Agentes de Qualidade
+    ├── Quality Agents
     │   ├── QA Agent
     │   ├── Reviewer Agent
     │   └── Security Agent
     │
-    ├── Agentes de Infraestrutura
+    ├── Infrastructure Agents
     │   ├── DevOps Agent
     │   └── Performance Agent
     │
-    ├── Agentes de Documentação
+    ├── Documentation Agents
     │   └── Documentation Agent
     │
     └── Git Agent
@@ -39,63 +39,63 @@ Orchestrator
 
 ---
 
-## Agentes
+## Agents
 
 ### Planner Agent
 
-**Responsabilidade:** Planejamento e divisão de tarefas.
+**Responsibility:** Planning and task breakdown.
 
-**Não faz:** Escrever código.
+**Does not:** Write code.
 
-**Funções:**
-- Receber solicitações do usuário
-- Analisar escopo e complexidade
-- Dividir em tarefas menores e gerenciáveis
-- Definir dependências entre tarefas
-- Criar plano de execução
+**Functions:**
+- Receive user requests
+- Analyze scope and complexity
+- Break down into smaller, manageable tasks
+- Define task dependencies
+- Create execution plan
 
-**Exemplo de saída:**
+**Example output:**
 ```
-Epic: Autenticação
+Epic: Authentication
 
 Tasks:
-1. Criar entidade User
-2. Criar Repository
-3. Criar JWT
-4. Criar Refresh Token
-5. Criar Middleware
-6. Criar Rotas
-7. Criar Testes
-8. Atualizar Documentação
+1. Create User entity
+2. Create Repository
+3. Create JWT
+4. Create Refresh Token
+5. Create Middleware
+6. Create Routes
+7. Create Tests
+8. Update Documentation
 ```
 
 ---
 
 ### Architect Agent
 
-**Responsabilidade:** Arquitetura e decisões técnicas.
+**Responsibility:** Architecture and technical decisions.
 
-**Funções:**
-- Definir arquitetura do projeto
-- Tomar decisões técnicas
-- Estabelecer padrões
-- Organizar estrutura de pastas
-- Garantir consistência arquitetural
+**Functions:**
+- Define project architecture
+- Make technical decisions
+- Establish standards
+- Organize folder structure
+- Ensure architectural consistency
 
 ---
 
 ### Backend Agent
 
-**Responsabilidade:** Lógica de negócio e implementação backend.
+**Responsibility:** Business logic and backend implementation.
 
-**Funções:**
-- Implementar regras de negócio
-- Criar casos de uso
-- Criar controllers
-- Criar services
-- Seguir princípios DDD
+**Functions:**
+- Implement business rules
+- Create use cases
+- Create controllers
+- Create services
+- Follow DDD principles
 
-**Permissões:**
+**Permissions:**
 - ✅ `src/`
 - ❌ `docker/`
 - ❌ `.github/`
@@ -104,85 +104,85 @@ Tasks:
 
 ### Database Agent
 
-**Responsabilidade:** Persistência e modelagem de dados.
+**Responsibility:** Data persistence and modeling.
 
-**Funções:**
-- Criar schemas (Prisma, TypeORM, Drizzle)
-- Criar migrations
-- Criar índices
-- Criar seeds
-- Otimizar consultas
+**Functions:**
+- Create schemas (Prisma, TypeORM, Drizzle)
+- Create migrations
+- Create indexes
+- Create seeds
+- Optimize queries
 
 ---
 
 ### Frontend Agent
 
-**Responsabilidade:** Interface do usuário.
+**Responsibility:** User interface.
 
-**Funções:**
-- Criar componentes
-- Implementar layouts
-- Integrar com APIs
-- Seguir padrões de design
+**Functions:**
+- Create components
+- Implement layouts
+- Integrate with APIs
+- Follow design patterns
 
 ---
 
 ### Documentation Agent
 
-**Responsabilidade:** Documentação do projeto.
+**Responsibility:** Project documentation.
 
-**Funções:**
-- Atualizar README
-- Criar/atualizar Swagger/OpenAPI
-- Configurar Scalar
-- Criar exemplos de uso
-- Atualizar changelog
-- Gerar documentação de API
+**Functions:**
+- Update README
+- Create/update Swagger/OpenAPI
+- Configure Scalar
+- Create usage examples
+- Update changelog
+- Generate API documentation
 
 ---
 
 ### QA Agent
 
-**Responsabilidade:** Garantia de qualidade.
+**Responsibility:** Quality assurance.
 
-**Funções:**
-- Criar testes unitários
-- Criar testes de integração
-- Criar testes e2e
-- Validar cobertura de código
-- Identificar casos extremos
+**Functions:**
+- Create unit tests
+- Create integration tests
+- Create e2e tests
+- Validate code coverage
+- Identify edge cases
 
 ---
 
 ### Reviewer Agent
 
-**Responsabilidade:** Revisão de código.
+**Responsibility:** Code review.
 
-**Não faz:** Implementar código.
+**Does not:** Implement code.
 
-**Funções:**
-- Verificar princípios SOLID
-- Verificar Clean Architecture
-- Verificar padrões DDD
-- Verificar code style
-- Identificar bugs
-- Identificar duplicações
-- Sugerir melhorias
+**Functions:**
+- Verify SOLID principles
+- Verify Clean Architecture
+- Verify DDD patterns
+- Verify code style
+- Identify bugs
+- Identify duplications
+- Suggest improvements
 
 ---
 
 ### DevOps Agent
 
-**Responsabilidade:** Infraestrutura e deploy.
+**Responsibility:** Infrastructure and deployment.
 
-**Funções:**
-- Criar/atualizar Dockerfile
-- Configurar CI/CD
-- Criar GitHub Actions
-- Gerenciar containers
-- Configurar ambientes
+**Functions:**
+- Create/update Dockerfile
+- Configure CI/CD
+- Create GitHub Actions
+- Manage containers
+- Configure environments
 
-**Permissões:**
+**Permissions:**
 - ✅ `docker/`
 - ✅ `.github/`
 - ❌ `src/domain/`
@@ -191,47 +191,47 @@ Tasks:
 
 ### Security Agent
 
-**Responsabilidade:** Segurança do sistema.
+**Responsibility:** System security.
 
-**Funções:**
-- Analisar vulnerabilidades
-- Detectar secrets expostos
-- Verificar autenticação
-- Verificar autorização
-- Sugerir correções de segurança
+**Functions:**
+- Analyze vulnerabilities
+- Detect exposed secrets
+- Verify authentication
+- Verify authorization
+- Suggest security fixes
 
 ---
 
 ### Performance Agent
 
-**Responsabilidade:** Otimização de desempenho.
+**Responsibility:** Performance optimization.
 
-**Funções:**
-- Identificar consultas lentas
-- Configurar cache
-- Otimizar Redis
-- Gerenciar filas
-- Identificar gargalos
-- Sugerir melhorias de performance
+**Functions:**
+- Identify slow queries
+- Configure cache
+- Optimize Redis
+- Manage queues
+- Identify bottlenecks
+- Suggest performance improvements
 
 ---
 
 ### Git Agent
 
-**Responsabilidade:** Controle de versão.
+**Responsibility:** Version control.
 
-**Funções:**
-- Criar commits padronizados
-- Gerar changelog
-- Criar Pull Requests
-- Gerar release notes
-- Gerenciar branches
+**Functions:**
+- Create standardized commits
+- Generate changelog
+- Create Pull Requests
+- Generate release notes
+- Manage branches
 
 ---
 
-## Comunicação entre Agentes
+## Agent Communication
 
-**Regra fundamental:** Agentes nunca conversam diretamente.
+**Fundamental rule:** Agents never communicate directly.
 
 ```
 Backend Agent
@@ -243,13 +243,13 @@ Backend Agent
 Database Agent
 ```
 
-Toda comunicação passa pelo Orchestrator para evitar inconsistências.
+All communication goes through the Orchestrator to avoid inconsistencies.
 
 ---
 
-## Execução Paralela
+## Parallel Execution
 
-Quando possível, agentes independentes executam em paralelo:
+When possible, independent agents run in parallel:
 
 ```
 Planner
@@ -270,12 +270,12 @@ Reviewer
 
 ---
 
-## Sistema de Permissões
+## Permission System
 
-Cada agente possui permissões específicas:
+Each agent has specific permissions:
 
-| Agente | Escopo Permitido | Escopo Bloqueado |
-|--------|------------------|------------------|
+| Agent | Allowed Scope | Blocked Scope |
+|-------|---------------|---------------|
 | Backend | `src/` | `docker/`, `.github/` |
 | Database | `src/infrastructure/database/` | `src/domain/` |
 | Frontend | `src/presentation/` | `src/infrastructure/` |
@@ -284,19 +284,19 @@ Cada agente possui permissões específicas:
 
 ---
 
-## Resolução de Conflitos
+## Conflict Resolution
 
-Quando dois agentes alteram o mesmo arquivo:
+When two agents modify the same file:
 
-1. **Merge automático** - quando possível
-2. **Reexecução** - quando conflito de lógica
-3. **Intervenção do Reviewer** - quando necessário
+1. **Automatic merge** - when possible
+2. **Re-execution** - when logic conflict
+3. **Reviewer intervention** - when necessary
 
 ---
 
-## Estados de Tarefa
+## Task States
 
-Cada tarefa passa por estados:
+Each task goes through states:
 
 ```
 Pending → Planning → Running → Waiting → Review → Testing → Completed
@@ -308,12 +308,12 @@ Pending → Planning → Running → Waiting → Review → Testing → Complete
 
 ---
 
-## Seleção de Modelo
+## Model Selection
 
-Cada agente pode utilizar um modelo diferente:
+Each agent can use a different model:
 
-| Agente | Modelo Recomendado |
-|--------|-------------------|
+| Agent | Recommended Model |
+|-------|-------------------|
 | Planner | GPT-5.5 |
 | Backend | Claude |
 | Database | Claude |
@@ -330,7 +330,7 @@ Cada agente pode utilizar um modelo diferente:
 
 ## Plugins
 
-Agentes podem ser estendidos via plugins:
+Agents can be extended via plugins:
 
 ```
 plugins/
@@ -347,9 +347,9 @@ plugins/
 └── terraform/
 ```
 
-Cada plugin adiciona:
-- Prompts específicos
-- Ferramentas especializadas
-- Templates prontos
-- Detectores de padrões
-- Comandos adicionais
+Each plugin adds:
+- Specialized prompts
+- Specialized tools
+- Ready-made templates
+- Pattern detectors
+- Additional commands

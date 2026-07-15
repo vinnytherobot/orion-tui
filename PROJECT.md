@@ -1,72 +1,72 @@
 # Multi-Agent CLI (Orion-cli)
-## Arquitetura para uma CLI Orquestradora de Agentes de IA
+## Architecture for an AI Agent Orchestration CLI
 
-> **Objetivo:** Desenvolver uma CLI capaz de atuar como um orquestrador inteligente de múltiplos agentes especializados, permitindo que eles colaborem em um mesmo projeto de software de forma paralela, organizada e escalável. A interface deve ser amigável e fácil de usar, com comandos claros e objetivos. O sistema deve ser capaz de se adaptar a diferentes tecnologias e frameworks, permitindo a adição de novos agentes e ferramentas de forma simples e modular. Além disso, a CLI deve ter interface parecida com o Mimo Code, Claude Code, Openclaude, opencode, agy, etc.
+> **Objective:** Develop a CLI capable of acting as an intelligent orchestrator of multiple specialized agents, allowing them to collaborate on the same software project in a parallel, organized, and scalable way. The interface must be friendly and easy to use, with clear and objective commands. The system must be able to adapt to different technologies and frameworks, allowing the addition of new agents and tools in a simple and modular way. Additionally, the CLI must have an interface similar to MiMo Code, Claude Code, OpenClaude, opencode, agy, etc.
 
 ---
 
-# Visão Geral
+# Overview
 
-A proposta é criar uma CLI que funcione como um **Tech Lead virtual**, responsável por:
+The proposal is to create a CLI that functions as a **virtual Tech Lead**, responsible for:
 
-- compreender a solicitação do usuário;
-- analisar o projeto existente;
-- planejar a implementação;
-- dividir o trabalho em tarefas menores;
-- distribuir essas tarefas para agentes especializados;
-- coordenar a execução paralela;
-- revisar as alterações;
-- integrar todas as mudanças;
-- gerar documentação;
-- executar testes;
-- criar commits e Pull Requests.
+- understanding the user's request;
+- analyzing the existing project;
+- planning the implementation;
+- breaking the work into smaller tasks;
+- distributing these tasks to specialized agents;
+- coordinating parallel execution;
+- reviewing changes;
+- integrating all changes;
+- generating documentation;
+- running tests;
+- creating commits and Pull Requests.
 
-O usuário interage apenas com a CLI.
+The user interacts only with the CLI.
 
-Exemplo:
+Example:
 
 ```bash
-orion implement "Adicionar autenticação JWT"
+orion implement "Add JWT authentication"
 ```
 
-Toda a complexidade acontece internamente.
+All complexity happens internally.
 
 ---
 
-# Objetivos
+# Objectives
 
-A CLI deverá ser capaz de:
+The CLI must be able to:
 
-- analisar qualquer projeto existente;
-- entender automaticamente sua arquitetura;
-- criar um plano de implementação;
-- executar diversos agentes simultaneamente;
-- compartilhar contexto entre agentes;
-- impedir conflitos de escrita;
-- revisar o código produzido;
-- executar testes;
-- gerar documentação automaticamente;
-- criar commits padronizados;
-- abrir Pull Requests completos.
-
----
-
-# Filosofia
-
-A CLI não será um agente.
-
-Ela será um **orquestrador**.
-
-Cada agente será especialista em apenas uma responsabilidade.
-
-Isso aproxima o fluxo de trabalho de uma equipe real de engenharia.
+- analyze any existing project;
+- automatically understand its architecture;
+- create an implementation plan;
+- execute multiple agents simultaneously;
+- share context between agents;
+- prevent write conflicts;
+- review produced code;
+- run tests;
+- automatically generate documentation;
+- create standardized commits;
+- open complete Pull Requests.
 
 ---
 
-# Arquitetura Geral
+# Philosophy
+
+The CLI will not be an agent.
+
+It will be an **orchestrator**.
+
+Each agent will be a specialist in only one responsibility.
+
+This brings the workflow closer to a real engineering team.
+
+---
+
+# General Architecture
 
 ```
-                Usuário
+                User
                     │
                     ▼
             Multi-Agent CLI
@@ -100,13 +100,13 @@ Pull Request
 
 ---
 
-# Componentes
+# Components
 
 ## CLI
 
-É responsável apenas por receber comandos.
+Responsible only for receiving commands.
 
-Exemplo:
+Example:
 
 ```bash
 orion init
@@ -126,38 +126,38 @@ orion test
 
 ## Orchestrator
 
-É o cérebro do sistema.
+It is the brain of the system.
 
-Responsabilidades:
+Responsibilities:
 
-- controlar fluxo
-- iniciar agentes
-- aguardar resultados
-- resolver conflitos
-- atualizar memória
-- finalizar execução
+- control flow
+- start agents
+- wait for results
+- resolve conflicts
+- update memory
+- finalize execution
 
 ---
 
 ## Project Analyzer
 
-Antes de iniciar qualquer implementação, o projeto será analisado.
+Before starting any implementation, the project will be analyzed.
 
-Ele deverá identificar automaticamente:
+It must automatically identify:
 
-- linguagem
+- language
 - framework
-- arquitetura
-- banco de dados
+- architecture
+- database
 - ORM
-- filas
+- queues
 - cache
-- testes
+- tests
 - CI/CD
 - docker
-- estrutura de pastas
+- folder structure
 
-Exemplo:
+Example:
 
 ```json
 {
@@ -175,52 +175,52 @@ Exemplo:
 
 ## Planner
 
-Recebe uma solicitação.
+Receives a request.
 
-Exemplo:
+Example:
 
-> Implementar autenticação JWT.
+> Implement JWT authentication.
 
-Ele transforma isso em tarefas.
+It transforms this into tasks.
 
-Exemplo:
+Example:
 
 ```
 Epic
 
-Autenticação
+Authentication
 
 Tasks
 
-Criar entidade User
+Create User entity
 
-Criar Repository
+Create Repository
 
-Criar JWT
+Create JWT
 
-Criar Refresh Token
+Create Refresh Token
 
-Criar Middleware
+Create Middleware
 
-Criar Rotas
+Create Routes
 
-Criar Testes
+Create Tests
 
-Atualizar Documentação
+Update Documentation
 ```
 
 ---
 
 ## Scheduler
 
-Não executa tarefas.
+Does not execute tasks.
 
-Ele apenas monta o fluxo de dependências.
+It only builds the dependency flow.
 
-Exemplo:
+Example:
 
 ```
-Criar User
+Create User
 
 ↓
 
@@ -236,10 +236,10 @@ Controller
 
 ↓
 
-Testes
+Tests
 ```
 
-Ou em paralelo:
+Or in parallel:
 
 ```
             Planner
@@ -257,9 +257,9 @@ Backend         Database
 
 # DAG
 
-Toda execução será baseada em um grafo acíclico.
+All execution will be based on a directed acyclic graph.
 
-Exemplo:
+Example:
 
 ```
 Task A
@@ -273,7 +273,7 @@ Task B
 Task C
 ```
 
-ou
+or
 
 ```
        A
@@ -289,43 +289,43 @@ ou
        D
 ```
 
-Assim somente tarefas independentes serão executadas em paralelo.
+Thus only independent tasks will be executed in parallel.
 
 ---
 
-# Agentes
+# Agents
 
-Cada agente possuirá apenas uma responsabilidade.
+Each agent will have only one responsibility.
 
 ---
 
 ## Planner Agent
 
-Especialista em planejamento.
+Specialist in planning.
 
-Não escreve código.
+Does not write code.
 
-Apenas divide tarefas.
+Only breaks down tasks.
 
 ---
 
 ## Architect Agent
 
-Responsável por:
+Responsible for:
 
-- arquitetura
-- decisões técnicas
-- padrões
-- organização
+- architecture
+- technical decisions
+- standards
+- organization
 
 ---
 
 ## Backend Agent
 
-Responsável por:
+Responsible for:
 
-- regras de negócio
-- casos de uso
+- business rules
+- use cases
 - controllers
 - services
 - DDD
@@ -334,47 +334,47 @@ Responsável por:
 
 ## Database Agent
 
-Responsável por:
+Responsible for:
 
 - Prisma
 - migrations
 - schemas
-- índices
+- indexes
 - seeds
 
 ---
 
 ## Frontend Agent
 
-Responsável apenas pela interface.
+Responsible only for the interface.
 
 ---
 
 ## Documentation Agent
 
-Atualiza:
+Updates:
 
 - README
 - Swagger/OpenAPI
 - Scalar
-- exemplos
+- examples
 - changelog
 
 ---
 
 ## QA Agent
 
-Cria:
+Creates:
 
-- testes unitários
-- integração
-- e2e
+- unit tests
+- integration tests
+- e2e tests
 
 ---
 
 ## DevOps Agent
 
-Responsável por:
+Responsible for:
 
 - Docker
 - CI
@@ -385,47 +385,47 @@ Responsável por:
 
 ## Security Agent
 
-Analisa:
+Analyzes:
 
-- vulnerabilidades
+- vulnerabilities
 - secrets
-- autenticação
-- autorização
+- authentication
+- authorization
 
 ---
 
 ## Performance Agent
 
-Analisa:
+Analyzes:
 
-- consultas lentas
+- slow queries
 - cache
 - Redis
-- filas
-- gargalos
+- queues
+- bottlenecks
 
 ---
 
 ## Reviewer Agent
 
-Não implementa.
+Does not implement.
 
-Apenas revisa.
+Only reviews.
 
-Verifica:
+Verifies:
 
 - SOLID
 - Clean Architecture
 - DDD
 - Code Style
 - Bugs
-- Duplicações
+- Duplications
 
 ---
 
 ## Git Agent
 
-Responsável por:
+Responsible for:
 
 - commits
 - changelog
@@ -434,11 +434,11 @@ Responsável por:
 
 ---
 
-# Memória Compartilhada
+# Shared Memory
 
-Todos os agentes utilizarão uma memória comum.
+All agents will use a common memory.
 
-Exemplo:
+Example:
 
 ```
 .state/
@@ -454,21 +454,21 @@ decisions.md
 architecture.md
 ```
 
-Cada agente poderá:
+Each agent can:
 
-- ler
-- atualizar
-- registrar decisões
+- read
+- update
+- register decisions
 
-Nunca alterar decisões de outro agente sem autorização do Orchestrator.
+Never alter another agent's decisions without Orchestrator authorization.
 
 ---
 
-# Comunicação
+# Communication
 
-Os agentes nunca conversarão diretamente.
+Agents will never communicate directly.
 
-Toda comunicação passará pelo Orchestrator.
+All communication will go through the Orchestrator.
 
 ```
 Backend
@@ -482,15 +482,15 @@ Orchestrator
 Database
 ```
 
-Isso evita inconsistências.
+This avoids inconsistencies.
 
 ---
 
-# Execução Paralela
+# Parallel Execution
 
-Sempre que possível.
+Whenever possible.
 
-Exemplo:
+Example:
 
 ```
 Planner
@@ -518,11 +518,11 @@ Reviewer
 
 # Providers
 
-A CLI não dependerá de um único modelo.
+The CLI will not depend on a single model.
 
-Ela deverá suportar múltiplos provedores.
+It must support multiple providers.
 
-Exemplo:
+Example:
 
 - OpenAI
 - Anthropic
@@ -531,27 +531,27 @@ Exemplo:
 - OpenRouter
 - Azure OpenAI
 
-Cada agente poderá utilizar um provider diferente.
+Each agent can use a different provider.
 
 ---
 
-# Seleção Inteligente de Modelo
+# Intelligent Model Selection
 
-Exemplo:
+Example:
 
-| Agente | Modelo |
+| Agent | Model |
 |---------|---------|
 | Planner | GPT-5.5 |
 | Backend | Claude |
 | QA | GPT-5.5 |
 | Documentation | Gemini |
-| Refatoração Local | Ollama |
+| Local Refactoring | Ollama |
 
 ---
 
-# Sistema de Plugins
+# Plugin System
 
-A CLI será extensível.
+The CLI will be extensible.
 
 ```
 plugins/
@@ -579,21 +579,21 @@ docker
 terraform
 ```
 
-Cada plugin adicionará:
+Each plugin will add:
 
 - prompts
-- ferramentas
+- tools
 - templates
-- detectores
-- comandos
+- detectors
+- commands
 
 ---
 
-# Sistema de Ferramentas
+# Tool System
 
-Cada agente poderá utilizar ferramentas.
+Each agent can use tools.
 
-Exemplo:
+Example:
 
 ```
 Read File
@@ -623,15 +623,15 @@ Postgres
 Redis
 ```
 
-O acesso será controlado pelo Orchestrator.
+Access will be controlled by the Orchestrator.
 
 ---
 
-# Sistema de Permissões
+# Permission System
 
-Nem todos os agentes terão acesso total.
+Not all agents will have full access.
 
-Exemplo:
+Example:
 
 Backend
 
@@ -653,13 +653,13 @@ DevOps
 
 ---
 
-Isso reduz conflitos.
+This reduces conflicts.
 
 ---
 
-# Conflitos
+# Conflicts
 
-Caso dois agentes alterem o mesmo arquivo:
+If two agents modify the same file:
 
 ```
 Backend
@@ -673,17 +673,17 @@ Orchestrator
 Frontend
 ```
 
-O Orchestrator decidirá:
+The Orchestrator will decide:
 
-- merge automático
-- reexecução
-- intervenção do Reviewer
+- automatic merge
+- re-execution
+- Reviewer intervention
 
 ---
 
-# Estados
+# States
 
-Cada tarefa possuirá um estado.
+Each task will have a state.
 
 ```
 Pending
@@ -707,11 +707,11 @@ Cancelled
 
 ---
 
-# Observabilidade
+# Observability
 
-A CLI deverá possuir logs.
+The CLI must have logs.
 
-Exemplo:
+Example:
 
 ```
 Planner
@@ -733,9 +733,9 @@ Pending
 
 ---
 
-# Histórico
+# History
 
-Toda execução será armazenada.
+All execution will be stored.
 
 ```
 .history/
@@ -747,28 +747,28 @@ execution-002
 execution-003
 ```
 
-Permitindo:
+Allowing:
 
 - replay
-- auditoria
-- comparação
+- audit
+- comparison
 
 ---
 
 # Git
 
-Fluxo esperado:
+Expected flow:
 
 ```
-Criar branch
+Create branch
 
 ↓
 
-Executar agentes
+Execute agents
 
 ↓
 
-Executar testes
+Run tests
 
 ↓
 
@@ -784,32 +784,32 @@ Push
 
 ↓
 
-Criar PR
+Create PR
 ```
 
 ---
 
 # Pull Request
 
-A CLI deverá gerar automaticamente:
+The CLI must automatically generate:
 
-- resumo
+- summary
 - changelog
 - checklist
-- impacto
-- testes realizados
+- impact
+- tests performed
 
 ---
 
-# Configuração
+# Configuration
 
-Arquivo:
+File:
 
 ```
 orion.config.ts
 ```
 
-Exemplo:
+Example:
 
 ```ts
 export default {
@@ -829,7 +829,7 @@ architecture: "ddd"
 
 ---
 
-# Estrutura do Projeto
+# Project Structure
 
 ```
 src/
@@ -863,16 +863,16 @@ config/
 
 # Roadmap
 
-## Fase 1
+## Phase 1
 
 - CLI
-- comandos básicos
-- leitura do projeto
+- basic commands
+- project reading
 - planner
 
 ---
 
-## Fase 2
+## Phase 2
 
 - Backend Agent
 - Database Agent
@@ -880,51 +880,51 @@ config/
 
 ---
 
-## Fase 3
+## Phase 3
 
-- execução paralela
+- parallel execution
 - scheduler
 - DAG
 
 ---
 
-## Fase 4
+## Phase 4
 
 - Reviewer
 - QA
-- testes automáticos
+- automatic tests
 
 ---
 
-## Fase 5
+## Phase 5
 
 - Git Agent
-- PR automático
+- automatic PR
 - changelog
 
 ---
 
-## Fase 6
+## Phase 6
 
 - plugins
-- novos providers
-- memória vetorial
-- aprendizado de padrões
+- new providers
+- vector memory
+- pattern learning
 
 ---
 
-# Visão de Longo Prazo
+# Long-Term Vision
 
-A CLI deverá evoluir de um simples executor de prompts para uma plataforma completa de desenvolvimento assistido por IA.
+The CLI must evolve from a simple prompt executor to a complete AI-assisted development platform.
 
-No futuro, ela poderá:
+In the future, it may:
 
-- coordenar dezenas de agentes simultaneamente;
-- adaptar automaticamente a estratégia conforme o tipo de projeto;
-- reutilizar conhecimento adquirido em projetos anteriores (quando configurado para isso);
-- integrar-se a serviços como GitHub, GitLab e Jira;
-- sugerir melhorias arquiteturais;
-- acompanhar métricas de qualidade, cobertura de testes e desempenho;
-- atuar como um "Engineering Manager" virtual, auxiliando no planejamento, execução e revisão do ciclo de desenvolvimento.
+- coordinate dozens of agents simultaneously;
+- automatically adapt strategy according to the project type;
+- reuse knowledge acquired in previous projects (when configured to do so);
+- integrate with services like GitHub, GitLab, and Jira;
+- suggest architectural improvements;
+- track quality metrics, test coverage, and performance;
+- act as a virtual "Engineering Manager," assisting in planning, execution, and review of the development cycle.
 
-O objetivo final é que o desenvolvedor deixe de gerenciar tarefas repetitivas e passe a focar nas decisões de produto e arquitetura, enquanto a CLI coordena a execução técnica de forma previsível, auditável e escalável.
+The ultimate goal is for the developer to stop managing repetitive tasks and focus on product and architecture decisions, while the CLI coordinates technical execution in a predictable, auditable, and scalable way.

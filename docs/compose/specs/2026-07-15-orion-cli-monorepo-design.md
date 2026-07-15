@@ -2,28 +2,28 @@
 
 ## [S1] Problem
 
-Construir uma CLI multi-agente que atua como Tech Lead virtual, orquestrando agentes especializados para desenvolvimento de software. A CLI deve ser modular, extensível e seguir princípios de DDD e Clean Architecture.
+Build a multi-agent CLI that acts as a virtual Tech Lead, orchestrating specialized agents for software development. The CLI must be modular, extensible, and follow DDD and Clean Architecture principles.
 
 ## [S2] Solution Overview
 
-Monorepo com separação clara entre aplicações (`apps/`) e packages compartilhados (`packages/`). Cada camada DDD é um package independente com dependências unidirecionais.
+Monorepo with clear separation between applications (`apps/`) and shared packages (`packages/`). Each DDD layer is an independent package with unidirectional dependencies.
 
 ## [S3] Architecture
 
-### Estrutura de Pastas
+### Folder Structure
 
 ```
 orion-cli/
 ├── apps/
-│   ├── backend/                  # CLI principal + API server
+│   ├── backend/                  # Main CLI + API server
 │   │   ├── src/
 │   │   │   ├── cli.ts           # Entry point CLI
 │   │   │   ├── server.ts        # Entry point API
-│   │   │   └── commands/        # Comandos Commander.js
+│   │   │   └── commands/        # Commander.js commands
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   └── frontend/                 # Interface TUI (Ink/React)
+│   └── frontend/                 # TUI interface (Ink/React)
 │       ├── src/
 │       │   ├── App.tsx
 │       │   └── components/
@@ -31,7 +31,7 @@ orion-cli/
 │       └── tsconfig.json
 │
 ├── packages/
-│   ├── domain/                   # Camada de domínio (pura)
+│   ├── domain/                   # Domain layer (pure)
 │   │   ├── src/
 │   │   │   ├── entities/        # Agent, Task, Project, etc.
 │   │   │   ├── value-objects/   # TaskId, AgentStatus, etc.
@@ -39,26 +39,26 @@ orion-cli/
 │   │   │   └── events/          # Domain events
 │   │   ├── package.json
 │   │   └── tsconfig.json
-│   │
-│   ├── application/              # Casos de uso
+│
+│   ├── application/              # Use cases
 │   │   ├── src/
 │   │   │   ├── use-cases/       # ImplementUseCase, ReviewUseCase, etc.
 │   │   │   ├── dtos/            # Input/Output DTOs
-│   │   │   └── ports/           # Interfaces de entrada
+│   │   │   └── ports/           # Input interfaces
 │   │   ├── package.json
 │   │   └── tsconfig.json
-│   │
-│   ├── infrastructure/           # Implementações concretas
+│
+│   ├── infrastructure/           # Concrete implementations
 │   │   ├── src/
-│   │   │   ├── database/        # Repositórios, ORM, migrations
+│   │   │   ├── database/        # Repositories, ORM, migrations
 │   │   │   ├── providers/       # OpenAI, Anthropic, Ollama, etc.
 │   │   │   ├── cache/           # Redis, in-memory
 │   │   │   ├── queue/           # BullMQ, etc.
 │   │   │   └── filesystem/      # State, history, config
 │   │   ├── package.json
 │   │   └── tsconfig.json
-│   │
-│   └── shared/                   # Utilitários compartilhados
+│
+│   └── shared/                   # Shared utilities
 │       ├── src/
 │       │   ├── errors/          # Custom errors
 │       │   ├── types/           # Generic types
@@ -76,43 +76,43 @@ orion-cli/
 └── AGENTS.md
 ```
 
-### Dependências entre Packages
+### Package Dependencies
 
 ```
 shared (zero deps)
     ↑
-domain (depende de shared)
+domain (depends on shared)
     ↑
-application (depende de domain + shared)
+application (depends on domain + shared)
     ↑
-infrastructure (depende de domain + shared)
+infrastructure (depends on domain + shared)
     ↑
-apps (depende de application + infrastructure)
+apps (depends on application + infrastructure)
 ```
 
-### Regras de Dependência
+### Dependency Rules
 
-- `domain` NUNCA depende de `application` ou `infrastructure`
-- `application` define interfaces; `infrastructure` implementa
-- `shared` não depende de nenhum outro package
-- `apps` orquestra tudo, mas não expõe lógica de negócio
+- `domain` NEVER depends on `application` or `infrastructure`
+- `application` defines interfaces; `infrastructure` implements
+- `shared` does not depend on any other package
+- `apps` orchestrates everything but does not expose business logic
 
 ## [S4] Components
 
 ### Domain Layer (`packages/domain`)
 
-**Responsabilidade:** Entidades, Value Objects, interfaces de repositório.
+**Responsibility:** Entities, Value Objects, repository interfaces.
 
-**Dependências:** Apenas `shared`.
+**Dependencies:** Only `shared`.
 
-**Conteúdo:**
-- `entities/Agent.ts` - Entidade agente
-- `entities/Task.ts` - Entidade tarefa
-- `entities/Project.ts` - Entidade projeto
-- `entities/Workflow.ts` - DAG de execução
-- `value-objects/TaskId.ts` - ID gerado
-- `value-objects/AgentStatus.ts` - Estado do agente
-- `value-objects/TaskStatus.ts` - Estado da tarefa
+**Contents:**
+- `entities/Agent.ts` - Agent entity
+- `entities/Task.ts` - Task entity
+- `entities/Project.ts` - Project entity
+- `entities/Workflow.ts` - Execution DAG
+- `value-objects/TaskId.ts` - Generated ID
+- `value-objects/AgentStatus.ts` - Agent state
+- `value-objects/TaskStatus.ts` - Task state
 - `repositories/IAgentRepository.ts` - Interface
 - `repositories/ITaskRepository.ts` - Interface
 - `repositories/IProjectRepository.ts` - Interface
@@ -120,27 +120,27 @@ apps (depende de application + infrastructure)
 
 ### Application Layer (`packages/application`)
 
-**Responsabilidade:** Casos de uso, orquestração, DTOs.
+**Responsibility:** Use cases, orchestration, DTOs.
 
-**Dependências:** `domain`, `shared`.
+**Dependencies:** `domain`, `shared`.
 
-**Conteúdo:**
-- `use-cases/ImplementUseCase.ts` - Orquestrar implementação
-- `use-cases/ReviewUseCase.ts` - Orquestrar revisão
-- `use-cases/PlanUseCase.ts` - Orquestrar planejamento
-- `use-cases/AnalyzeProjectUseCase.ts` - Analisar projeto
-- `dtos/TaskDTO.ts` - DTOs de tarefa
-- `dtos/AgentDTO.ts` - DTOs de agente
-- `ports/IOrchestratorPort.ts` - Interface do orchestrator
-- `ports/IAgentExecutorPort.ts` - Interface de execução
+**Contents:**
+- `use-cases/ImplementUseCase.ts` - Orchestrate implementation
+- `use-cases/ReviewUseCase.ts` - Orchestrate review
+- `use-cases/PlanUseCase.ts` - Orchestrate planning
+- `use-cases/AnalyzeProjectUseCase.ts` - Analyze project
+- `dtos/TaskDTO.ts` - Task DTOs
+- `dtos/AgentDTO.ts` - Agent DTOs
+- `ports/IOrchestratorPort.ts` - Orchestrator interface
+- `ports/IAgentExecutorPort.ts` - Execution interface
 
 ### Infrastructure Layer (`packages/infrastructure`)
 
-**Responsabilidade:** Implementações concretas.
+**Responsibility:** Concrete implementations.
 
-**Dependências:** `domain`, `shared`.
+**Dependencies:** `domain`, `shared`.
 
-**Conteúdo:**
+**Contents:**
 - `database/PrismaAgentRepository.ts`
 - `database/PrismaTaskRepository.ts`
 - `providers/OpenAIProvider.ts`
@@ -153,14 +153,14 @@ apps (depende de application + infrastructure)
 
 ### Shared Layer (`packages/shared`)
 
-**Responsabilidade:** Utilitários, tipos, erros.
+**Responsibility:** Utilities, types, errors.
 
-**Dependências:** Nenhuma.
+**Dependencies:** None.
 
-**Conteúdo:**
+**Contents:**
 - `errors/AppError.ts`
 - `errors/ValidationError.ts`
-- `types/Result.ts` - Result type (sucesso/erro)
+- `types/Result.ts` - Result type (success/error)
 - `utils/logger.ts`
 - `config/OrionConfig.ts`
 - `config/ConfigLoader.ts`
@@ -187,22 +187,22 @@ User → CLI Command → Application Use Case → Domain Logic → Infrastructur
 
 ## [S6] Error Handling
 
-- **Domain:** Erros de negócio (TaskAlreadyCompleted, InvalidAgentStatus)
-- **Application:** Erros de orquechestration (AgentTimeout, DependencyCycle)
-- **Infrastructure:** Erros técnicos (ConnectionFailed, ProviderError)
-- **Shared:** Result type para operações que podem falhar
+- **Domain:** Business errors (TaskAlreadyCompleted, InvalidAgentStatus)
+- **Application:** Orchestration errors (AgentTimeout, DependencyCycle)
+- **Infrastructure:** Technical errors (ConnectionFailed, ProviderError)
+- **Shared:** Result type for operations that can fail
 
 ## [S7] Testing Strategy
 
 - **Domain:** Unit tests (100% coverage)
-- **Application:** Unit tests com mocks
+- **Application:** Unit tests with mocks
 - **Infrastructure:** Integration tests
 - **Apps:** E2E tests
 
 ## [S8] Tech Stack
 
-| Camada | Tecnologia |
-|--------|------------|
+| Layer | Technology |
+|-------|------------|
 | Language | TypeScript 5.4+ |
 | Runtime | Node.js 18+ |
 | Module System | ESM |
@@ -212,20 +212,20 @@ User → CLI Command → Application Use Case → Domain Logic → Infrastructur
 | Testing | Vitest |
 | Linting | ESLint + Prettier |
 | Build | tsc |
-| ORM | Prisma (opção) |
+| ORM | Prisma (optional) |
 | Cache | Redis + in-memory |
 | Providers | OpenAI, Anthropic, Ollama |
 
 ## [S9] Plugin System
 
-Plugins são packages que adicionam:
-- Prompts específicos
-- Ferramentas especializadas
-- Templates prontos
-- Detectores de padrões
-- Comandos adicionais
+Plugins are packages that add:
+- Specialized prompts
+- Specialized tools
+- Ready-made templates
+- Pattern detectors
+- Additional commands
 
-Estrutura de um plugin:
+Plugin structure:
 ```
 plugins/
 ├── fastify/
@@ -237,7 +237,7 @@ plugins/
 
 ## [S10] Configuration
 
-Arquivo `orion.config.ts` na raiz do projeto:
+File `orion.config.ts` in the project root:
 ```ts
 export default {
   provider: "anthropic",

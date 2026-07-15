@@ -2,7 +2,7 @@
   "name": "orion-cli",
   "version": "0.1.0",
   "private": true,
-  "description": "Multi-Agent CLI - Orquestrador Inteligente de Agentes de IA",
+  "description": "Multi-Agent CLI - Intelligent Orchestration of AI Agents",
   "workspaces": [
     "apps/*",
     "packages/*"
