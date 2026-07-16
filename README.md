@@ -24,9 +24,10 @@ Orion TUI is a multi-agent orchestration system that acts as a virtual Tech Lead
 - **Interactive TUI** - Beautiful terminal interface with Ink/React
 - **Multi-Agent Orchestration** - Parallel execution of specialized agents
 - **DDD Architecture** - Clean, maintainable codebase
-- **Extensible Plugin System** - Add new agents and capabilities
+- **REST API Backend** - Fastify-based backend with JWT authentication
+- **Persistent Login** - Tokens persist on device until logout
 - **Multiple LLM Providers** - OpenAI, Anthropic, Ollama support
-- **Git Integration** - Automated commits, PRs, and changelogs
+- **Docker Support** - Containerized deployment ready
 
 ## Installation
 
@@ -34,13 +35,14 @@ Orion TUI is a multi-agent orchestration system that acts as a virtual Tech Lead
 
 - Node.js >= 18.0.0
 - npm >= 10.0.0
+- PostgreSQL (for production)
 
 ### From Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/orion-cli.git
-cd orion-cli
+git clone https://github.com/vinnytherobot/orion-tui.git
+cd orion-tui
 
 # Install dependencies
 npm install
@@ -48,73 +50,78 @@ npm install
 # Build all packages
 npm run build
 
-# Link TUI globally
-cd apps/backend
-npm link
+# Start development servers
+npm run dev
 ```
 
-### Verify Installation
+### Environment Setup
+
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-orion --help
+cp .env.example .env
 ```
+
+Required variables:
+- `DATABASE_URL` - PostgreSQL connection string
+- `JWT_SECRET` - Secret key for JWT tokens
+- `ORION_API_URL` - Backend API URL (default: http://localhost:3000)
 
 ## Quick Start
 
 ### Interactive Mode
 
 ```bash
-# Start the interactive TUI
-orion
+# Start the TUI
+npm run dev:frontend
 
-# Or with a specific request
-orion implement "Add JWT authentication"
+# Start the backend
+npm run dev:backend
 ```
 
 ### Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `/init` | Analyze current project |
-| `/implement <task>` | Implement a feature |
-| `/review` | Review code |
-| `/test` | Run tests |
-| `/docs` | Generate documentation |
-| `/release` | Create release |
-| `/help` | Show help |
+| `/help` | Show available commands |
+| `/register <name> <email> <password>` | Register a new user |
+| `/login <email> <password>` | Login to the API |
+| `/logout` | Logout and remove saved credentials |
+| `/me` | Show current user info |
+| `/status` | Show API status and active agents |
+| `/agents [role]` | List all available agents |
+| `/init <projectId>` | Initialize agents for a project |
+| `/projects` | List all projects |
+| `/create-project <name> <path>` | Create a new project |
+| `/delete-project <id>` | Delete a project |
+| `/project <id>` | Show project details |
+| `/tasks [status]` | List active tasks |
+| `/create-task <projectId> <title>` | Create a new task |
+| `/delete-task <taskId>` | Delete a task |
+| `/task-stats <projectId>` | Show task statistics |
+| `/assign <agentId> <taskId>` | Assign a task to an agent |
+| `/complete <agentId> [result]` | Mark task as completed |
+| `/reset-agent <agentId>` | Reset agent to idle state |
+| `/api-keys [list\|create\|delete]` | Manage API keys |
+| `/config [key] [value]` | Show or update configuration |
+| `/version` | Show Orion version |
 | `/clear` | Clear screen |
 | `/exit` | Exit TUI |
-
-### Example Usage
-
-```bash
-# Analyze your project
-/init
-
-# Implement a feature
-/implement Add user authentication with JWT
-
-# Review code
-/review
-
-# Generate documentation
-/docs
-```
 
 ## Architecture
 
 ### Monorepo Structure
 
 ```
-orion-cli/
+orion-tui/
 ├── apps/
-│   ├── backend/          # Backend application
+│   ├── backend/          # Fastify API server
 │   └── frontend/         # TUI interface (Ink/React)
 ├── packages/
 │   ├── shared/           # Shared utilities
 │   ├── domain/           # Domain entities (DDD)
 │   ├── application/      # Use cases
-│   └── infrastructure/   # Implementations
+│   └── infrastructure/   # Database, providers, cache
 └── docs/                 # Documentation
 ```
 
@@ -131,7 +138,7 @@ orion-cli/
 │    (Entities, Value Objects)        │
 ├─────────────────────────────────────┤
 │       Infrastructure Layer          │
-│   (Providers, Cache, Database)      │
+│   (Database, Providers, Cache)      │
 └─────────────────────────────────────┘
 ```
 
@@ -158,8 +165,8 @@ orion-cli/
 
 ```bash
 # Clone and install
-git clone https://github.com/YOUR_USERNAME/orion-cli.git
-cd orion-cli
+git clone https://github.com/vinnytherobot/orion-tui.git
+cd orion-tui
 npm install
 
 # Build
@@ -174,38 +181,44 @@ npm run dev
 | Script | Description |
 |--------|-------------|
 | `npm run build` | Build all packages |
-| `npm run dev` | Watch mode |
-| `npm run lint` | Run ESLint |
-| `npm run test` | Run tests |
+| `npm run dev` | Watch mode for all packages |
+| `npm run dev:frontend` | Watch frontend only |
+| `npm run dev:backend` | Watch backend only |
+| `npm run lint` | Run Biome linter |
+| `npm run lint:fix` | Fix lint issues |
+| `npm run format` | Format code with Biome |
+| `npm run check` | Run Biome check (lint + format) |
+| `npm run check:fix` | Fix all Biome issues |
 | `npm run typecheck` | Type checking |
-| `npm run format` | Format code |
 | `npm run clean` | Clean artifacts |
+| `npm run db:migrate` | Run database migrations |
+| `npm run db:generate` | Generate database migrations |
+| `npm run docker:up` | Start Docker containers |
+| `npm run docker:down` | Stop Docker containers |
 
-### Testing
+### Database
+
+The project uses PostgreSQL with Drizzle ORM:
 
 ```bash
-# Run all tests
-npm run test
+# Run migrations
+npm run db:migrate
 
-# Run tests for specific package
-npm run test --workspace=@orion/domain
-
-# Run with coverage
-npm run test:coverage
+# Generate new migration
+npm run db:generate
 ```
 
-## Configuration
+## Docker
 
-Create `orion.config.ts` in your project root:
+```bash
+# Start all services
+npm run docker:up
 
-```typescript
-export default {
-  provider: 'anthropic',
-  reviewer: 'gpt-5.5',
-  parallelAgents: 6,
-  defaultBranch: 'development',
-  architecture: 'ddd',
-};
+# Stop all services
+npm run docker:down
+
+# Rebuild and start
+npm run docker:build
 ```
 
 ## Contributing
@@ -220,33 +233,6 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 - Improve documentation
 - Share feedback
 
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Write tests
-5. Update documentation
-6. Submit a pull request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
-## Community
-
-- [GitHub Issues](https://github.com/YOUR_USERNAME/orion-cli/issues) - Bug reports and feature requests
-- [GitHub Discussions](https://github.com/YOUR_USERNAME/orion-cli/discussions) - Questions and discussions
-
-## Roadmap
-
-- [ ] Core orchestrator implementation
-- [ ] Agent execution engine
-- [ ] LLM provider integration
-- [ ] Plugin system
-- [ ] Git automation
-- [ ] PR generation
-- [ ] Vector memory
-- [ ] Pattern learning
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -254,11 +240,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - [Ink](https://github.com/vadimdemedes/ink) - React for TUI
-- [Commander.js](https://github.com/tj/commander.js) - CLI framework (backend)
+- [Fastify](https://www.fastify.io/) - Backend framework
+- [Drizzle ORM](https://orm.drizzle.team/) - Database ORM
 - [Turborepo](https://turbo.build/) - Monorepo tooling
+- [Biome](https://biomejs.dev/) - Linter and formatter
 
 ---
 
 <p align="center">
-  Made with ❤️ by the Orion TUI Community
+  Made with ❤️ by vinnytherobot and the ORION Community
 </p>

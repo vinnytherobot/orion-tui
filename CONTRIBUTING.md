@@ -48,16 +48,20 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 - Node.js >= 18.0.0
 - npm >= 10.0.0
 - Git
+- PostgreSQL (for database features)
 
 ### Setup Steps
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/orion-cli.git
-cd orion-cli
+git clone https://github.com/vinnytherobot/orion-tui.git
+cd orion-tui
 
 # Install dependencies
 npm install
+
+# Copy environment file
+cp .env.example .env
 
 # Build all packages
 npm run build
@@ -65,8 +69,8 @@ npm run build
 # Run typecheck
 npm run typecheck
 
-# Run tests
-npm run test
+# Start development
+npm run dev
 ```
 
 ### Available Scripts
@@ -75,24 +79,32 @@ npm run test
 |--------|-------------|
 | `npm run build` | Build all packages |
 | `npm run dev` | Watch mode for development |
-| `npm run lint` | Run ESLint |
-| `npm run test` | Run tests |
+| `npm run dev:frontend` | Watch frontend only |
+| `npm run dev:backend` | Watch backend only |
+| `npm run lint` | Run Biome linter |
+| `npm run lint:fix` | Fix lint issues |
+| `npm run format` | Format code with Biome |
+| `npm run check` | Run Biome check (lint + format) |
+| `npm run check:fix` | Fix all Biome issues |
 | `npm run typecheck` | Run TypeScript typecheck |
-| `npm run format` | Format code with Prettier |
 | `npm run clean` | Clean build artifacts |
+| `npm run db:migrate` | Run database migrations |
+| `npm run db:generate` | Generate database migrations |
+| `npm run docker:up` | Start Docker containers |
+| `npm run docker:down` | Stop Docker containers |
 
 ## Project Structure
 
 ```
-orion-cli/
+orion-tui/
 ├── apps/
-│   ├── backend/          # Backend application
+│   ├── backend/          # Fastify API server
 │   └── frontend/         # TUI interface
 ├── packages/
 │   ├── shared/           # Shared utilities
 │   ├── domain/           # Domain entities
 │   ├── application/      # Use cases
-│   └── infrastructure/   # Implementations
+│   └── infrastructure/   # Database, providers, cache
 ├── docs/
 │   └── compose/          # Specs and plans
 └── .github/              # GitHub templates
@@ -104,8 +116,8 @@ The project follows DDD (Domain-Driven Design) with Clean Architecture:
 
 - **Domain Layer** - Pure business logic, no dependencies
 - **Application Layer** - Use cases, orchestrates domain
-- **Infrastructure Layer** - Implements interfaces
-- **Presentation Layer** - User interface (TUI)
+- **Infrastructure Layer** - Implements interfaces (database, providers)
+- **Presentation Layer** - User interface (TUI) and API (Fastify)
 
 ### Package Dependencies
 
@@ -194,9 +206,8 @@ test(domain): add unit tests for Task entity
 
 1. Run `npm run typecheck` - must pass
 2. Run `npm run lint` - no errors
-3. Run `npm run test` - all tests pass
-4. Run `npm run build` - builds successfully
-5. Update documentation if needed
+3. Run `npm run build` - builds successfully
+4. Update documentation if needed
 
 ### PR Template
 
