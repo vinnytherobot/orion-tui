@@ -1,4 +1,4 @@
-import type { Agent } from "../entities/Agent.js";
+import type { Agent } from '../entities/Agent.js';
 
 export interface IAgentRepository {
   findById(id: string): Promise<Agent | null>;

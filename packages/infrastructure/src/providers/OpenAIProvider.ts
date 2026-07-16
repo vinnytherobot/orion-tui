@@ -1,21 +1,16 @@
-import type { Result } from "@orion/shared";
-import { AppError, ok, fail } from "@orion/shared";
-import type {
-  ILLMProvider,
-  LLMMessage,
-  LLMResponse,
-  LLMProviderConfig,
-} from "./BaseProvider.js";
+import type { Result } from '@orion/shared';
+import { AppError, fail, ok } from '@orion/shared';
+import type { ILLMProvider, LLMMessage, LLMProviderConfig, LLMResponse } from './BaseProvider.js';
 
 export class OpenAIProvider implements ILLMProvider {
-  readonly name = "openai";
+  readonly name = 'openai';
   readonly defaultModel: string;
 
   private config: LLMProviderConfig;
 
   constructor(config: LLMProviderConfig) {
     this.config = config;
-    this.defaultModel = config.model ?? "gpt-4o";
+    this.defaultModel = config.model ?? 'gpt-4o';
   }
 
   async chat(
@@ -25,13 +20,13 @@ export class OpenAIProvider implements ILLMProvider {
     const model = overrides?.model ?? this.defaultModel;
     const maxTokens = overrides?.maxTokens ?? this.config.maxTokens ?? 4096;
     const temperature = overrides?.temperature ?? this.config.temperature ?? 0.7;
-    const baseUrl = overrides?.baseUrl ?? this.config.baseUrl ?? "https://api.openai.com/v1";
+    const baseUrl = overrides?.baseUrl ?? this.config.baseUrl ?? 'https://api.openai.com/v1';
 
     try {
       const response = await fetch(`${baseUrl}/chat/completions`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${this.config.apiKey}`,
         },
         body: JSON.stringify({
@@ -44,9 +39,7 @@ export class OpenAIProvider implements ILLMProvider {
 
       if (!response.ok) {
         const body = await response.text();
-        return fail(
-          AppError.internal(`OpenAI API error (${response.status}): ${body}`),
-        );
+        return fail(AppError.internal(`OpenAI API error (${response.status}): ${body}`));
       }
 
       const data = (await response.json()) as {
@@ -57,7 +50,7 @@ export class OpenAIProvider implements ILLMProvider {
 
       const choice = data.choices[0];
       if (!choice) {
-        return fail(AppError.internal("OpenAI returned no choices"));
+        return fail(AppError.internal('OpenAI returned no choices'));
       }
 
       return ok({
@@ -68,7 +61,12 @@ export class OpenAIProvider implements ILLMProvider {
           completionTokens: data.usage.completion_tokens,
           totalTokens: data.usage.total_tokens,
         },
-        finishReason: choice.finish_reason === "stop" ? "stop" : choice.finish_reason === "length" ? "length" : "error",
+        finishReason:
+          choice.finish_reason === 'stop'
+            ? 'stop'
+            : choice.finish_reason === 'length'
+              ? 'length'
+              : 'error',
       });
     } catch (error) {
       return fail(
@@ -81,7 +79,7 @@ export class OpenAIProvider implements ILLMProvider {
 
   async isAvailable(): Promise<boolean> {
     try {
-      const baseUrl = this.config.baseUrl ?? "https://api.openai.com/v1";
+      const baseUrl = this.config.baseUrl ?? 'https://api.openai.com/v1';
       const response = await fetch(`${baseUrl}/models`, {
         headers: { Authorization: `Bearer ${this.config.apiKey}` },
       });

@@ -1,7 +1,7 @@
-import React from "react";
-import { Box, Text } from "ink";
-import { ORION_BANNER, ORION_TAGLINE, ORION_VERSION } from "../utils/ascii-logo.js";
-import { apiClient } from "../api/client.js";
+import { Box, Text } from 'ink';
+import type React from 'react';
+import { apiClient } from '../api/client.js';
+import { ORION_BANNER, ORION_TAGLINE, ORION_VERSION } from '../utils/ascii-logo.js';
 
 interface WelcomeScreenProps {
   model?: string;
@@ -10,8 +10,8 @@ interface WelcomeScreenProps {
 }
 
 export function WelcomeScreen({
-  model = "gpt-4",
-  directory = ".",
+  model = 'gpt-4',
+  directory = '.',
   tips,
 }: WelcomeScreenProps): React.ReactElement {
   const defaultTips = [
@@ -29,15 +29,12 @@ export function WelcomeScreen({
         <Text color="cyan" bold>
           {ORION_BANNER}
         </Text>
-        <Text color="gray">{ORION_TAGLINE} v{ORION_VERSION}</Text>
+        <Text color="gray">
+          {ORION_TAGLINE} v{ORION_VERSION}
+        </Text>
       </Box>
 
-      <Box
-        borderStyle="single"
-        borderColor="gray"
-        paddingX={1}
-        flexDirection="column"
-      >
+      <Box borderStyle="single" borderColor="gray" paddingX={1} flexDirection="column">
         <Text bold color="yellow">
           Quick Start
         </Text>

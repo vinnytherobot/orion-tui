@@ -1,6 +1,6 @@
-import React from "react";
-import { render } from "ink";
-import { App } from "./App.js";
+import { render } from 'ink';
+import React from 'react';
+import { App } from './App.js';
 
 // Clear terminal before rendering TUI
 process.stdout.write('\x1Bc');

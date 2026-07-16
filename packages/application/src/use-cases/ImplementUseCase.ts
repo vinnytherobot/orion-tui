@@ -1,7 +1,7 @@
-import { type Result, ok, fail, AppError } from "@orion/shared";
-import type { ITaskRepository, IAgentRepository, Task, Agent } from "@orion/domain";
-import type { IAgentExecutorPort } from "../ports/IAgentExecutorPort.js";
-import type { TaskResponseDTO } from "../dtos/TaskDTO.js";
+import type { Agent, IAgentRepository, ITaskRepository, Task } from '@orion/domain';
+import { AppError, type Result, fail, ok } from '@orion/shared';
+import type { TaskResponseDTO } from '../dtos/TaskDTO.js';
+import type { IAgentExecutorPort } from '../ports/IAgentExecutorPort.js';
 
 function toTaskResponse(task: Task): TaskResponseDTO {
   const props = task.toJSON();
@@ -43,7 +43,7 @@ export class ImplementUseCase {
   async execute(input: { taskId: string }): Promise<Result<TaskResponseDTO, AppError>> {
     const task = await this.taskRepository.findById(input.taskId);
     if (!task) {
-      return fail(AppError.notFound("Task"));
+      return fail(AppError.notFound('Task'));
     }
 
     const startResult = task.start();
@@ -54,7 +54,7 @@ export class ImplementUseCase {
     const agents = await this.agentRepository.findAll();
     const idleAgent = agents.find((a) => a.status.isIdle());
     if (!idleAgent) {
-      return fail(AppError.conflict("No idle agents available"));
+      return fail(AppError.conflict('No idle agents available'));
     }
 
     const assignResult = task.assignTo(idleAgent.id);

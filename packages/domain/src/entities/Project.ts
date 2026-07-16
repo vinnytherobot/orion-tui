@@ -19,12 +19,17 @@ export interface ProjectAnalysis {
 export class Project {
   private constructor(private props: ProjectProps) {}
 
-  static create(input: { id: string; name: string; rootPath: string; description?: string }): Project {
+  static create(input: {
+    id: string;
+    name: string;
+    rootPath: string;
+    description?: string;
+  }): Project {
     return new Project({
       id: input.id,
       name: input.name,
       rootPath: input.rootPath,
-      description: input.description ?? "",
+      description: input.description ?? '',
       taskIds: [],
       createdAt: new Date(),
       updatedAt: new Date(),

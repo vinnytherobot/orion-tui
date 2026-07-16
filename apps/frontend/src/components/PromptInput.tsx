@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import TextInput from 'ink-text-input';
+import type React from 'react';
+import { useState } from 'react';
 import { getCommandSuggestions } from '../utils/commands.js';
 
 interface PromptInputProps {
@@ -21,7 +22,7 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
 
     if (value.startsWith('/')) {
       const matches = getCommandSuggestions(value);
-      const suggestionNames = matches.map(cmd => `/${cmd.name}`);
+      const suggestionNames = matches.map((cmd) => `/${cmd.name}`);
       setSuggestions(suggestionNames);
       setSelectedIndex(0);
     } else {
@@ -31,12 +32,13 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
   };
 
   const handleSubmit = (value: string) => {
-    const submittedValue = suggestions.length > 0 && selectedIndex >= 0 && suggestions[selectedIndex]
-      ? suggestions[selectedIndex]!
-      : value;
+    const submittedValue =
+      suggestions.length > 0 && selectedIndex >= 0 && suggestions[selectedIndex]
+        ? suggestions[selectedIndex]!
+        : value;
 
     if (submittedValue.trim()) {
-      setHistory(prev => [...prev, submittedValue]);
+      setHistory((prev) => [...prev, submittedValue]);
       onSubmit(submittedValue);
     }
 
@@ -52,11 +54,11 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
     // Navigate suggestions if visible
     if (suggestions.length > 0) {
       if (key.upArrow) {
-        setSelectedIndex(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
         return;
       }
       if (key.downArrow) {
-        setSelectedIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
+        setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
         return;
       }
       if (key.tab) {
@@ -77,9 +79,7 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
         setTempInput(input);
       }
 
-      const newIndex = historyIndex === -1
-        ? history.length - 1
-        : Math.max(0, historyIndex - 1);
+      const newIndex = historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
 
       setHistoryIndex(newIndex);
       setInput(history[newIndex] || '');
@@ -101,12 +101,15 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
     }
   });
 
-  const showHistoryHint = history.length > 0 && historyIndex === -1 && suggestions.length === 0 && !input;
+  const showHistoryHint =
+    history.length > 0 && historyIndex === -1 && suggestions.length === 0 && !input;
 
   return (
     <Box flexDirection="column">
       <Box>
-        <Text color="cyan" bold>{'> '}</Text>
+        <Text color="cyan" bold>
+          {'> '}
+        </Text>
         <TextInput
           value={input}
           onChange={handleChange}

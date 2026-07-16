@@ -11,7 +11,19 @@ export const CreateTaskSchema = z.object({
 export const UpdateTaskSchema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional(),
-  status: z.enum(['pending', 'planning', 'running', 'waiting', 'review', 'testing', 'completed', 'failed', 'cancelled']).optional(),
+  status: z
+    .enum([
+      'pending',
+      'planning',
+      'running',
+      'waiting',
+      'review',
+      'testing',
+      'completed',
+      'failed',
+      'cancelled',
+    ])
+    .optional(),
   assignedAgent: z.string().optional(),
   priority: z.enum(['low', 'medium', 'high']).optional(),
 });

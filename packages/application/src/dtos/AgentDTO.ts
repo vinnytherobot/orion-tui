@@ -1,4 +1,4 @@
-import type { AgentStatusValue } from "@orion/domain";
+import type { AgentStatusValue } from '@orion/domain';
 
 export interface CreateAgentDTO {
   id: string;

@@ -1,5 +1,5 @@
 export interface TaskCompletedEvent {
-  type: "task.completed";
+  type: 'task.completed';
   taskId: string;
   agentId: string | null;
   result: string;
@@ -12,7 +12,7 @@ export function createTaskCompletedEvent(
   result: string,
 ): TaskCompletedEvent {
   return {
-    type: "task.completed",
+    type: 'task.completed',
     taskId,
     agentId,
     result,

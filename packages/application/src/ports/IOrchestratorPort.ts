@@ -1,6 +1,6 @@
-import type { Result, AppError } from "@orion/shared";
-import type { TaskResponseDTO } from "../dtos/TaskDTO.js";
-import type { AgentResponseDTO } from "../dtos/AgentDTO.js";
+import type { AppError, Result } from '@orion/shared';
+import type { AgentResponseDTO } from '../dtos/AgentDTO.js';
+import type { TaskResponseDTO } from '../dtos/TaskDTO.js';
 
 export interface IOrchestratorPort {
   executePlan(plan: TaskResponseDTO[]): Promise<Result<void, AppError>>;

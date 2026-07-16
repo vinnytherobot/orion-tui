@@ -1,4 +1,4 @@
-import { AppError } from "./AppError.js";
+import { AppError } from './AppError.js';
 
 export interface FieldError {
   field: string;
@@ -10,7 +10,7 @@ export class ValidationError extends AppError {
   public readonly fields: FieldError[];
 
   constructor(message: string, fields: FieldError[]) {
-    super(message, "VALIDATION_ERROR", 400);
+    super(message, 'VALIDATION_ERROR', 400);
     this.fields = fields;
   }
 
@@ -19,7 +19,7 @@ export class ValidationError extends AppError {
   }
 
   static fromFields(fields: FieldError[]): ValidationError {
-    const message = fields.map((f) => `${f.field}: ${f.message}`).join("; ");
+    const message = fields.map((f) => `${f.field}: ${f.message}`).join('; ');
     return new ValidationError(message, fields);
   }
 

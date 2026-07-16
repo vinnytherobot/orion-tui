@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
-import { AgentService } from '../services/agent.service.js';
 import type { AppDeps } from '../container.js';
+import { AgentService } from '../services/agent.service.js';
 
 export async function agentRoutes(app: FastifyInstance, _deps: AppDeps) {
   const agentService = new AgentService();

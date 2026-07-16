@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
-import { LoginSchema, RegisterSchema } from '../schemas/auth.js';
 import type { AppDeps } from '../container.js';
+import { LoginSchema, RegisterSchema } from '../schemas/auth.js';
 import type { AuthService } from '../services/auth.service.js';
 
 export async function authRoutes(app: FastifyInstance, _deps: AppDeps, authService: AuthService) {

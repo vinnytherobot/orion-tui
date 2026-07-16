@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
+import type { AppDeps } from '../container.js';
 import { CreateTaskSchema, UpdateTaskSchema } from '../schemas/task.js';
 import { TaskService } from '../services/task.service.js';
-import type { AppDeps } from '../container.js';
 
 export async function taskRoutes(app: FastifyInstance, _deps: AppDeps) {
   const taskService = new TaskService();

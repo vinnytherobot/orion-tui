@@ -1,12 +1,12 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { join, dirname } from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 
 export class StateManager {
   private basePath: string;
 
   constructor(projectRoot: string) {
-    this.basePath = join(projectRoot, ".orion");
+    this.basePath = join(projectRoot, '.orion');
   }
 
   async ensureDir(): Promise<void> {
@@ -18,7 +18,7 @@ export class StateManager {
   async read<T>(filename: string): Promise<T | null> {
     const filePath = join(this.basePath, filename);
     try {
-      const content = await readFile(filePath, "utf-8");
+      const content = await readFile(filePath, 'utf-8');
       return JSON.parse(content) as T;
     } catch {
       return null;
@@ -29,13 +29,13 @@ export class StateManager {
     await this.ensureDir();
     const filePath = join(this.basePath, filename);
     await mkdir(dirname(filePath), { recursive: true });
-    await writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
+    await writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
   }
 
   async delete(filename: string): Promise<boolean> {
     const filePath = join(this.basePath, filename);
     try {
-      const { unlink } = await import("node:fs/promises");
+      const { unlink } = await import('node:fs/promises');
       await unlink(filePath);
       return true;
     } catch {

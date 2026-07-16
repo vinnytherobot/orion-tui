@@ -1,6 +1,6 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { join } from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 export interface HistoryEntry {
   id: string;
@@ -19,7 +19,7 @@ export class HistoryManager {
   private basePath: string;
 
   constructor(projectRoot: string) {
-    this.basePath = join(projectRoot, ".orion", "history");
+    this.basePath = join(projectRoot, '.orion', 'history');
   }
 
   private getHistoryFile(taskId: string): string {
@@ -38,20 +38,20 @@ export class HistoryManager {
 
     let entries: HistoryEntry[] = [];
     try {
-      const content = await readFile(filePath, "utf-8");
+      const content = await readFile(filePath, 'utf-8');
       entries = JSON.parse(content) as HistoryEntry[];
     } catch {
       entries = [];
     }
 
     entries.push(entry);
-    await writeFile(filePath, JSON.stringify(entries, null, 2), "utf-8");
+    await writeFile(filePath, JSON.stringify(entries, null, 2), 'utf-8');
   }
 
   async getByTaskId(taskId: string): Promise<HistoryEntry[]> {
     const filePath = this.getHistoryFile(taskId);
     try {
-      const content = await readFile(filePath, "utf-8");
+      const content = await readFile(filePath, 'utf-8');
       return JSON.parse(content) as HistoryEntry[];
     } catch {
       return [];
@@ -59,14 +59,14 @@ export class HistoryManager {
   }
 
   async getByAgentId(agentId: string): Promise<HistoryEntry[]> {
-    const { readdir } = await import("node:fs/promises");
+    const { readdir } = await import('node:fs/promises');
     const entries: HistoryEntry[] = [];
 
     try {
       const files = await readdir(this.basePath);
       for (const file of files) {
-        if (!file.endsWith(".json")) continue;
-        const content = await readFile(join(this.basePath, file), "utf-8");
+        if (!file.endsWith('.json')) continue;
+        const content = await readFile(join(this.basePath, file), 'utf-8');
         const taskEntries = JSON.parse(content) as HistoryEntry[];
         entries.push(...taskEntries.filter((e) => e.agentId === agentId));
       }
@@ -80,14 +80,14 @@ export class HistoryManager {
   }
 
   async getAll(): Promise<HistoryEntry[]> {
-    const { readdir } = await import("node:fs/promises");
+    const { readdir } = await import('node:fs/promises');
     const entries: HistoryEntry[] = [];
 
     try {
       const files = await readdir(this.basePath);
       for (const file of files) {
-        if (!file.endsWith(".json")) continue;
-        const content = await readFile(join(this.basePath, file), "utf-8");
+        if (!file.endsWith('.json')) continue;
+        const content = await readFile(join(this.basePath, file), 'utf-8');
         entries.push(...(JSON.parse(content) as HistoryEntry[]));
       }
     } catch {

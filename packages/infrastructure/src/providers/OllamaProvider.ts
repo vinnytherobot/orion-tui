@@ -1,21 +1,16 @@
-import type { Result } from "@orion/shared";
-import { AppError, ok, fail } from "@orion/shared";
-import type {
-  ILLMProvider,
-  LLMMessage,
-  LLMResponse,
-  LLMProviderConfig,
-} from "./BaseProvider.js";
+import type { Result } from '@orion/shared';
+import { AppError, fail, ok } from '@orion/shared';
+import type { ILLMProvider, LLMMessage, LLMProviderConfig, LLMResponse } from './BaseProvider.js';
 
 export class OllamaProvider implements ILLMProvider {
-  readonly name = "ollama";
+  readonly name = 'ollama';
   readonly defaultModel: string;
 
   private config: LLMProviderConfig;
 
   constructor(config: LLMProviderConfig) {
     this.config = config;
-    this.defaultModel = config.model ?? "llama3";
+    this.defaultModel = config.model ?? 'llama3';
   }
 
   async chat(
@@ -23,12 +18,12 @@ export class OllamaProvider implements ILLMProvider {
     overrides?: Partial<LLMProviderConfig>,
   ): Promise<Result<LLMResponse, AppError>> {
     const model = overrides?.model ?? this.defaultModel;
-    const baseUrl = overrides?.baseUrl ?? this.config.baseUrl ?? "http://localhost:11434";
+    const baseUrl = overrides?.baseUrl ?? this.config.baseUrl ?? 'http://localhost:11434';
 
     try {
       const response = await fetch(`${baseUrl}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model,
           messages: messages.map((m) => ({
@@ -45,9 +40,7 @@ export class OllamaProvider implements ILLMProvider {
 
       if (!response.ok) {
         const body = await response.text();
-        return fail(
-          AppError.internal(`Ollama API error (${response.status}): ${body}`),
-        );
+        return fail(AppError.internal(`Ollama API error (${response.status}): ${body}`));
       }
 
       const data = (await response.json()) as {
@@ -66,7 +59,7 @@ export class OllamaProvider implements ILLMProvider {
           completionTokens: data.eval_count,
           totalTokens: data.prompt_eval_count + data.eval_count,
         },
-        finishReason: data.done ? "stop" : "length",
+        finishReason: data.done ? 'stop' : 'length',
       });
     } catch (error) {
       return fail(
@@ -79,7 +72,7 @@ export class OllamaProvider implements ILLMProvider {
 
   async isAvailable(): Promise<boolean> {
     try {
-      const baseUrl = this.config.baseUrl ?? "http://localhost:11434";
+      const baseUrl = this.config.baseUrl ?? 'http://localhost:11434';
       const response = await fetch(`${baseUrl}/api/tags`);
       return response.ok;
     } catch {

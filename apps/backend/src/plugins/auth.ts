@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import type { AuthService } from '../services/auth.service.js';
 
 declare module 'fastify' {
@@ -16,7 +16,10 @@ type AuthPluginOptions = {
   authService: AuthService;
 };
 
-export async function authPlugin(fastify: FastifyInstance, options: AuthPluginOptions): Promise<void> {
+export async function authPlugin(
+  fastify: FastifyInstance,
+  options: AuthPluginOptions,
+): Promise<void> {
   const { authService } = options;
 
   // Make authService available
@@ -29,7 +32,7 @@ export async function authPlugin(fastify: FastifyInstance, options: AuthPluginOp
 
     // Skip auth for public routes
     const publicRoutes = ['/api/auth/login', '/api/auth/register', '/api/health'];
-    if (publicRoutes.some(route => request.url.startsWith(route))) {
+    if (publicRoutes.some((route) => request.url.startsWith(route))) {
       return;
     }
 

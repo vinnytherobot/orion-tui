@@ -1,7 +1,7 @@
-import type { Result, AppError } from "@orion/shared";
+import type { AppError, Result } from '@orion/shared';
 
 export interface LLMMessage {
-  role: "system" | "user" | "assistant";
+  role: 'system' | 'user' | 'assistant';
   content: string;
 }
 
@@ -13,7 +13,7 @@ export interface LLMResponse {
     completionTokens: number;
     totalTokens: number;
   };
-  finishReason: "stop" | "length" | "error";
+  finishReason: 'stop' | 'length' | 'error';
 }
 
 export interface LLMProviderConfig {
@@ -28,6 +28,9 @@ export interface ILLMProvider {
   readonly name: string;
   readonly defaultModel: string;
 
-  chat(messages: LLMMessage[], config?: Partial<LLMProviderConfig>): Promise<Result<LLMResponse, AppError>>;
+  chat(
+    messages: LLMMessage[],
+    config?: Partial<LLMProviderConfig>,
+  ): Promise<Result<LLMResponse, AppError>>;
   isAvailable(): Promise<boolean>;
 }

@@ -1,6 +1,6 @@
-import { type Result, ok, fail, AppError } from "@orion/shared";
-import { TaskId } from "../value-objects/TaskId.js";
-import { TaskStatus } from "../value-objects/TaskStatus.js";
+import { AppError, type Result, fail, ok } from '@orion/shared';
+import { TaskId } from '../value-objects/TaskId.js';
+import { TaskStatus } from '../value-objects/TaskStatus.js';
 
 export interface TaskProps {
   id: TaskId;
@@ -79,7 +79,7 @@ export class Task {
 
   assignTo(agentId: string): Result<void, AppError> {
     if (this.props.status.isTerminal()) {
-      return fail(AppError.conflict("Cannot assign a terminal task"));
+      return fail(AppError.conflict('Cannot assign a terminal task'));
     }
     this.props.assignedAgentId = agentId;
     this.props.updatedAt = new Date();

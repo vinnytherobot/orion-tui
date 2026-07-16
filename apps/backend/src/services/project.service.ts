@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import type { CreateProjectInput, UpdateProjectInput } from '../schemas/project.js';
 
 interface Project {
@@ -33,7 +33,7 @@ export class ProjectService {
   }
 
   async findAll(userId: string): Promise<Project[]> {
-    return Array.from(projects.values()).filter(p => p.ownerId === userId);
+    return Array.from(projects.values()).filter((p) => p.ownerId === userId);
   }
 
   async findById(id: string, userId: string): Promise<Project | null> {

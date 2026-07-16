@@ -1,16 +1,16 @@
-import React from "react";
-import { Box, Text } from "ink";
+import { Box, Text } from 'ink';
+import type React from 'react';
 
 type TaskStatusValue =
-  | "pending"
-  | "planning"
-  | "running"
-  | "waiting"
-  | "review"
-  | "testing"
-  | "completed"
-  | "failed"
-  | "cancelled";
+  | 'pending'
+  | 'planning'
+  | 'running'
+  | 'waiting'
+  | 'review'
+  | 'testing'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
 
 interface Task {
   id: string;
@@ -24,10 +24,10 @@ interface TaskListProps {
 }
 
 const DEMO_TASKS: Task[] = [
-  { id: "T1", title: "Create entity User", status: "completed", assignedAgentId: "backend" },
-  { id: "T2", title: "Create Repository", status: "running", assignedAgentId: "database" },
-  { id: "T3", title: "Create JWT Auth", status: "pending", assignedAgentId: null },
-  { id: "T4", title: "Create Tests", status: "pending", assignedAgentId: null },
+  { id: 'T1', title: 'Create entity User', status: 'completed', assignedAgentId: 'backend' },
+  { id: 'T2', title: 'Create Repository', status: 'running', assignedAgentId: 'database' },
+  { id: 'T3', title: 'Create JWT Auth', status: 'pending', assignedAgentId: null },
+  { id: 'T4', title: 'Create Tests', status: 'pending', assignedAgentId: null },
 ];
 
 export function TaskList({ tasks = DEMO_TASKS }: TaskListProps): React.ReactElement {
@@ -49,25 +49,25 @@ export function TaskList({ tasks = DEMO_TASKS }: TaskListProps): React.ReactElem
 
 function getStatusIcon(status: TaskStatusValue): string {
   switch (status) {
-    case "completed":
-      return "✓";
-    case "running":
-      return "⟳";
-    case "failed":
-      return "✗";
-    case "pending":
-      return "○";
-    case "planning":
-      return "◎";
-    case "waiting":
-      return "⏳";
-    case "review":
-      return "👁";
-    case "testing":
-      return "⚡";
-    case "cancelled":
-      return "⊘";
+    case 'completed':
+      return '✓';
+    case 'running':
+      return '⟳';
+    case 'failed':
+      return '✗';
+    case 'pending':
+      return '○';
+    case 'planning':
+      return '◎';
+    case 'waiting':
+      return '⏳';
+    case 'review':
+      return '👁';
+    case 'testing':
+      return '⚡';
+    case 'cancelled':
+      return '⊘';
     default:
-      return "?";
+      return '?';
   }
 }

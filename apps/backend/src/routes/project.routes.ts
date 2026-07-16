@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
+import type { AppDeps } from '../container.js';
 import { CreateProjectSchema, UpdateProjectSchema } from '../schemas/project.js';
 import { ProjectService } from '../services/project.service.js';
-import type { AppDeps } from '../container.js';
 
 export async function projectRoutes(app: FastifyInstance, _deps: AppDeps) {
   const projectService = new ProjectService();

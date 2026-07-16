@@ -1,4 +1,4 @@
-import type { TaskStatusValue } from "@orion/domain";
+import type { TaskStatusValue } from '@orion/domain';
 
 export interface CreateTaskDTO {
   title: string;

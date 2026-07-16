@@ -1,7 +1,7 @@
-import React from "react";
-import { Box, Text } from "ink";
+import { Box, Text } from 'ink';
+import type React from 'react';
 
-type AgentStatusValue = "idle" | "running" | "waiting" | "failed" | "completed";
+type AgentStatusValue = 'idle' | 'running' | 'waiting' | 'failed' | 'completed';
 
 interface Agent {
   id: string;
@@ -16,10 +16,10 @@ interface AgentPanelProps {
 }
 
 const DEMO_AGENTS: Agent[] = [
-  { id: "planner", name: "Planner", role: "planning", status: "idle", currentTaskId: null },
-  { id: "backend", name: "Backend", role: "backend", status: "completed", currentTaskId: null },
-  { id: "database", name: "Database", role: "database", status: "running", currentTaskId: "T2" },
-  { id: "qa", name: "QA", role: "quality", status: "idle", currentTaskId: null },
+  { id: 'planner', name: 'Planner', role: 'planning', status: 'idle', currentTaskId: null },
+  { id: 'backend', name: 'Backend', role: 'backend', status: 'completed', currentTaskId: null },
+  { id: 'database', name: 'Database', role: 'database', status: 'running', currentTaskId: 'T2' },
+  { id: 'qa', name: 'QA', role: 'quality', status: 'idle', currentTaskId: null },
 ];
 
 export function AgentPanel({ agents = DEMO_AGENTS }: AgentPanelProps): React.ReactElement {
@@ -42,16 +42,15 @@ export function AgentPanel({ agents = DEMO_AGENTS }: AgentPanelProps): React.Rea
 
 function getStatusColor(status: AgentStatusValue): string {
   switch (status) {
-    case "running":
-      return "yellow";
-    case "waiting":
-      return "yellow";
-    case "failed":
-      return "red";
-    case "completed":
-      return "green";
-    case "idle":
+    case 'running':
+      return 'yellow';
+    case 'waiting':
+      return 'yellow';
+    case 'failed':
+      return 'red';
+    case 'completed':
+      return 'green';
     default:
-      return "gray";
+      return 'gray';
   }
 }

@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import type { CreateTaskInput, UpdateTaskInput } from '../schemas/task.js';
 
 interface Task {
@@ -6,7 +6,16 @@ interface Task {
   projectId: string;
   title: string;
   description: string;
-  status: 'pending' | 'planning' | 'running' | 'waiting' | 'review' | 'testing' | 'completed' | 'failed' | 'cancelled';
+  status:
+    | 'pending'
+    | 'planning'
+    | 'running'
+    | 'waiting'
+    | 'review'
+    | 'testing'
+    | 'completed'
+    | 'failed'
+    | 'cancelled';
   priority: 'low' | 'medium' | 'high';
   dependencies: string[];
   assignedAgent?: string;
@@ -39,7 +48,7 @@ export class TaskService {
   }
 
   async findAll(_userId: string, projectId?: string): Promise<Task[]> {
-    return Array.from(tasks.values()).filter(t => {
+    return Array.from(tasks.values()).filter((t) => {
       if (projectId) return t.projectId === projectId;
       return true;
     });
@@ -78,14 +87,14 @@ export class TaskService {
     completed: number;
     failed: number;
   }> {
-    const projectTasks = Array.from(tasks.values()).filter(t => t.projectId === projectId);
+    const projectTasks = Array.from(tasks.values()).filter((t) => t.projectId === projectId);
 
     return {
       total: projectTasks.length,
-      pending: projectTasks.filter(t => t.status === 'pending').length,
-      running: projectTasks.filter(t => t.status === 'running').length,
-      completed: projectTasks.filter(t => t.status === 'completed').length,
-      failed: projectTasks.filter(t => t.status === 'failed').length,
+      pending: projectTasks.filter((t) => t.status === 'pending').length,
+      running: projectTasks.filter((t) => t.status === 'running').length,
+      completed: projectTasks.filter((t) => t.status === 'completed').length,
+      failed: projectTasks.filter((t) => t.status === 'failed').length,
     };
   }
 }

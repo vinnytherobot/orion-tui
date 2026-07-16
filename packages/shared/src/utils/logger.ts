@@ -18,7 +18,7 @@ export class Logger {
 
   constructor(options: LoggerOptions = {}) {
     this.level = options.level ?? LogLevel.INFO;
-    this.prefix = options.prefix ?? "";
+    this.prefix = options.prefix ?? '';
     this.timestamp = options.timestamp ?? true;
   }
 
@@ -56,7 +56,7 @@ export class Logger {
     if (this.prefix) parts.push(`[${this.prefix}]`);
     parts.push(message);
 
-    const formatted = parts.join(" ");
+    const formatted = parts.join(' ');
 
     switch (level) {
       case LogLevel.DEBUG:

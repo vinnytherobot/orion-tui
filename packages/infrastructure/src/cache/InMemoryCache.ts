@@ -7,7 +7,7 @@ export class InMemoryCache {
   private store = new Map<string, CacheEntry<unknown>>();
   private defaultTtlMs: number;
 
-  constructor(defaultTtlMs: number = 60_000) {
+  constructor(defaultTtlMs = 60_000) {
     this.defaultTtlMs = defaultTtlMs;
   }
 

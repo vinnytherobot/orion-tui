@@ -1,5 +1,9 @@
-import crypto from 'crypto';
-import type { UserRepository, ApiKeyRepository, RefreshTokenRepository } from '@orion/infrastructure';
+import crypto from 'node:crypto';
+import type {
+  ApiKeyRepository,
+  RefreshTokenRepository,
+  UserRepository,
+} from '@orion/infrastructure';
 import type { LoginInput, RegisterInput } from '../schemas/auth.js';
 
 interface SafeUser {
@@ -34,12 +38,17 @@ export function makeAuthService(deps: AuthServiceDeps) {
 
   function signJwt(payload: Record<string, unknown>, expiresIn: string): string {
     const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
-    const body = Buffer.from(JSON.stringify({
-      ...payload,
-      iat: Math.floor(Date.now() / 1000),
-      exp: parseExpiration(expiresIn),
-    })).toString('base64url');
-    const signature = crypto.createHmac('sha256', jwtSecret).update(`${header}.${body}`).digest('base64url');
+    const body = Buffer.from(
+      JSON.stringify({
+        ...payload,
+        iat: Math.floor(Date.now() / 1000),
+        exp: parseExpiration(expiresIn),
+      }),
+    ).toString('base64url');
+    const signature = crypto
+      .createHmac('sha256', jwtSecret)
+      .update(`${header}.${body}`)
+      .digest('base64url');
     return `${header}.${body}.${signature}`;
   }
 
@@ -49,15 +58,21 @@ export function makeAuthService(deps: AuthServiceDeps) {
     if (!match) return now + 3600;
 
     const [, amount, unit] = match;
-    const num = parseInt(amount!, 10);
+    const num = Number.parseInt(amount!, 10);
 
     switch (unit) {
-      case 's': return now + num;
-      case 'm': return now + num * 60;
-      case 'h': return now + num * 3600;
-      case 'd': return now + num * 86400;
-      case 'y': return now + num * 365 * 86400;
-      default: return now + 3600;
+      case 's':
+        return now + num;
+      case 'm':
+        return now + num * 60;
+      case 'h':
+        return now + num * 3600;
+      case 'd':
+        return now + num * 86400;
+      case 'y':
+        return now + num * 365 * 86400;
+      default:
+        return now + 3600;
     }
   }
 
@@ -151,7 +166,11 @@ export function makeAuthService(deps: AuthServiceDeps) {
       return { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt };
     },
 
-    async createApiKey(userId: string, name: string, expiresAt?: Date): Promise<{ id: string; key: string; name: string }> {
+    async createApiKey(
+      userId: string,
+      name: string,
+      expiresAt?: Date,
+    ): Promise<{ id: string; key: string; name: string }> {
       const key = generateApiKey();
       const now = new Date();
 
@@ -167,9 +186,11 @@ export function makeAuthService(deps: AuthServiceDeps) {
       return { id: apiKey.id, key: apiKey.key, name: apiKey.name };
     },
 
-    async listApiKeys(userId: string): Promise<Array<{ id: string; name: string; lastUsedAt: Date | null; createdAt: Date }>> {
+    async listApiKeys(
+      userId: string,
+    ): Promise<Array<{ id: string; name: string; lastUsedAt: Date | null; createdAt: Date }>> {
       const keys = await apiKeyRepository.findByUserId(userId);
-      return keys.map(k => ({
+      return keys.map((k) => ({
         id: k.id,
         name: k.name,
         lastUsedAt: k.lastUsedAt,
@@ -189,7 +210,10 @@ export function makeAuthService(deps: AuthServiceDeps) {
         const [header, body, signature] = token.split('.');
         if (!header || !body || !signature) return null;
 
-        const expectedSignature = crypto.createHmac('sha256', jwtSecret).update(`${header}.${body}`).digest('base64url');
+        const expectedSignature = crypto
+          .createHmac('sha256', jwtSecret)
+          .update(`${header}.${body}`)
+          .digest('base64url');
         if (signature !== expectedSignature) return null;
 
         const payload = JSON.parse(Buffer.from(body, 'base64url').toString());

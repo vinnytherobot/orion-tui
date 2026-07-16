@@ -1,5 +1,5 @@
-import type { Task } from "../entities/Task.js";
-import type { TaskStatusValue } from "../value-objects/TaskStatus.js";
+import type { Task } from '../entities/Task.js';
+import type { TaskStatusValue } from '../value-objects/TaskStatus.js';
 
 export interface ITaskRepository {
   findById(id: string): Promise<Task | null>;

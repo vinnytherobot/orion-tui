@@ -11,7 +11,9 @@ export const users = pgTable('users', {
 
 export const apiKeys = pgTable('api_keys', {
   id: text('id').primaryKey(),
-  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   key: text('key').notNull().unique(),
   lastUsedAt: timestamp('last_used_at'),
@@ -21,7 +23,9 @@ export const apiKeys = pgTable('api_keys', {
 
 export const refreshTokens = pgTable('refresh_tokens', {
   id: text('id').primaryKey(),
-  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   token: text('token').notNull().unique(),
   expiresAt: timestamp('expires_at').notNull(),
   createdAt: timestamp('created_at').notNull(),

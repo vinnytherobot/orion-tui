@@ -2,8 +2,8 @@
  * Command definitions for Orion CLI
  */
 
-import type { Command } from '../types/index.js';
 import { apiClient } from '../api/client.js';
+import type { Command } from '../types/index.js';
 
 export const COMMANDS: Command[] = [
   {
@@ -13,7 +13,7 @@ export const COMMANDS: Command[] = [
     handler: async (args: string[]): Promise<string> => {
       const firstArg = args[0];
       if (firstArg) {
-        const cmd = COMMANDS.find(c => c.name === firstArg || c.aliases?.includes(firstArg));
+        const cmd = COMMANDS.find((c) => c.name === firstArg || c.aliases?.includes(firstArg));
         if (cmd) {
           let output = `\n${cmd.name.toUpperCase()}\n${cmd.description}`;
           if (cmd.usage) output += `\nUsage: ${cmd.usage}`;
@@ -23,7 +23,7 @@ export const COMMANDS: Command[] = [
         return `Command not found: ${firstArg}`;
       }
       let output = '\nAvailable commands:';
-      COMMANDS.filter(c => !c.hidden).forEach(cmd => {
+      COMMANDS.filter((c) => !c.hidden).forEach((cmd) => {
         output += `\n  ${cmd.name.padEnd(20)} ${cmd.description}`;
       });
       return output;
@@ -74,14 +74,14 @@ export const COMMANDS: Command[] = [
 
       const agents = result.data?.agents || [];
       const filterRole = args[0]?.toLowerCase();
-      const filtered = filterRole ? agents.filter(a => a.role.includes(filterRole)) : agents;
+      const filtered = filterRole ? agents.filter((a) => a.role.includes(filterRole)) : agents;
 
       if (filtered.length === 0) {
         return '\nNo agents found.';
       }
 
       let output = '\nAvailable Agents:';
-      filtered.forEach(a => {
+      filtered.forEach((a) => {
         const statusIcon = a.status === 'running' ? '●' : a.status === 'idle' ? '○' : '○';
         output += `\n  ${statusIcon} ${a.name.padEnd(15)} ${a.role.padEnd(12)} ${a.status}`;
       });
@@ -103,15 +103,22 @@ export const COMMANDS: Command[] = [
 
       const tasks = result.data?.tasks || [];
       const filterStatus = args[0]?.toLowerCase();
-      const filtered = filterStatus ? tasks.filter(t => t.status === filterStatus) : tasks;
+      const filtered = filterStatus ? tasks.filter((t) => t.status === filterStatus) : tasks;
 
       if (filtered.length === 0) {
         return '\nNo tasks found.';
       }
 
       let output = '\nTasks:';
-      filtered.forEach(t => {
-        const statusIcon = t.status === 'completed' ? '✓' : t.status === 'running' ? '⟳' : t.status === 'failed' ? '✗' : '○';
+      filtered.forEach((t) => {
+        const statusIcon =
+          t.status === 'completed'
+            ? '✓'
+            : t.status === 'running'
+              ? '⟳'
+              : t.status === 'failed'
+                ? '✗'
+                : '○';
         output += `\n  ${statusIcon} [${t.id.slice(0, 8)}] ${t.title} (${t.status})`;
         if (t.assignedAgent) output += ` → ${t.assignedAgent}`;
       });
@@ -148,7 +155,7 @@ export const COMMANDS: Command[] = [
       }
 
       let output = '\nProjects:';
-      projects.forEach(p => {
+      projects.forEach((p) => {
         output += `\n  [${p.id.slice(0, 8)}] ${p.name} - ${p.path} (${p.architecture})`;
       });
 
@@ -432,7 +439,7 @@ export const COMMANDS: Command[] = [
         }
 
         let output = '\nAPI Keys:';
-        keys.forEach(k => {
+        keys.forEach((k) => {
           const lastUsed = k.lastUsedAt ? new Date(k.lastUsedAt).toLocaleString() : 'never';
           output += `\n  [${k.id.slice(0, 8)}] ${k.name} (last used: ${lastUsed})`;
         });
@@ -486,7 +493,7 @@ export const COMMANDS: Command[] = [
 
       const agents = result.data?.agents || [];
       let output = `\nInitialized ${agents.length} agents:`;
-      agents.forEach(a => {
+      agents.forEach((a) => {
         output += `\n  ${a.name} (${a.role})`;
       });
 
@@ -562,7 +569,7 @@ export const COMMANDS: Command[] = [
 export function findCommand(input: string): Command | undefined {
   const cleanInput = input.trim().toLowerCase().replace(/^\//, '');
 
-  return COMMANDS.find(cmd => {
+  return COMMANDS.find((cmd) => {
     if (cmd.name === cleanInput) return true;
     if (cmd.aliases?.includes(cleanInput)) return true;
     return false;
@@ -576,15 +583,15 @@ export function getCommandSuggestions(partial: string): Command[] {
   const cleanPartial = partial.trim().toLowerCase().replace(/^\//, '');
 
   if (!cleanPartial) {
-    return COMMANDS.filter(cmd => !cmd.hidden);
+    return COMMANDS.filter((cmd) => !cmd.hidden);
   }
 
-  return COMMANDS.filter(cmd => {
+  return COMMANDS.filter((cmd) => {
     if (cmd.name.includes(cleanPartial)) return true;
     if (cmd.aliases?.some((alias: string) => alias.includes(cleanPartial))) return true;
     if (cmd.description.toLowerCase().includes(cleanPartial)) return true;
     return false;
-  }).filter(cmd => !cmd.hidden);
+  }).filter((cmd) => !cmd.hidden);
 }
 
 /**

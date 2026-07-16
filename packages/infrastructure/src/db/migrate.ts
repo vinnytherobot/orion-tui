@@ -1,5 +1,5 @@
+import { resolve } from 'node:path';
 import { config } from 'dotenv';
-import { resolve } from 'path';
 import postgres from 'postgres';
 
 // Load .env from project root
@@ -38,11 +38,11 @@ const migrations = [
     expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
   )`,
-  `CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`,
-  `CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id)`,
-  `CREATE INDEX IF NOT EXISTS idx_api_keys_key ON api_keys(key)`,
-  `CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id)`,
-  `CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token)`,
+  'CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)',
+  'CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id)',
+  'CREATE INDEX IF NOT EXISTS idx_api_keys_key ON api_keys(key)',
+  'CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id)',
+  'CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token)',
 ];
 
 async function migrate() {

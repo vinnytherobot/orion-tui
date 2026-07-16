@@ -1,30 +1,28 @@
-import React from "react";
-import { Box, Text } from "ink";
-import type { Message } from "../types/index.js";
+import { Box, Text } from 'ink';
+import type React from 'react';
+import type { Message } from '../types/index.js';
 
 interface MessageHistoryProps {
   messages?: Message[];
 }
 
-const ROLE_LABELS: Record<Message["role"], string> = {
-  user: "You",
-  assistant: "Orion",
-  system: "System",
+const ROLE_LABELS: Record<Message['role'], string> = {
+  user: 'You',
+  assistant: 'Orion',
+  system: 'System',
 };
 
-const ROLE_COLORS: Record<Message["role"], string> = {
-  user: "cyan",
-  assistant: "green",
-  system: "yellow",
+const ROLE_COLORS: Record<Message['role'], string> = {
+  user: 'cyan',
+  assistant: 'green',
+  system: 'yellow',
 };
 
 export function MessageHistory({ messages = [] }: MessageHistoryProps): React.ReactElement {
   if (messages.length === 0) {
     return (
       <Box flexDirection="column" paddingX={1}>
-        <Text color="gray">
-          Type a command or message to get started.
-        </Text>
+        <Text color="gray">Type a command or message to get started.</Text>
       </Box>
     );
   }

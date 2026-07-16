@@ -15,7 +15,7 @@ export interface Command {
   name: string;
   description: string;
   usage?: string;
-  handler: (args: string[]) => Promise<string | void> | string | void;
+  handler: (args: string[]) => Promise<string | undefined> | string | undefined;
   aliases?: string[];
   hidden?: boolean;
 }
@@ -24,7 +24,20 @@ export interface Agent {
   id: string;
   name: string;
   description: string;
-  role: 'orchestrator' | 'planner' | 'architect' | 'backend' | 'database' | 'frontend' | 'qa' | 'reviewer' | 'devops' | 'security' | 'performance' | 'git' | 'documentation';
+  role:
+    | 'orchestrator'
+    | 'planner'
+    | 'architect'
+    | 'backend'
+    | 'database'
+    | 'frontend'
+    | 'qa'
+    | 'reviewer'
+    | 'devops'
+    | 'security'
+    | 'performance'
+    | 'git'
+    | 'documentation';
   status: 'idle' | 'running' | 'blocked' | 'completed';
   model?: string;
 }
@@ -32,7 +45,16 @@ export interface Agent {
 export interface Task {
   id: string;
   summary: string;
-  status: 'pending' | 'planning' | 'running' | 'waiting' | 'review' | 'testing' | 'completed' | 'failed' | 'cancelled';
+  status:
+    | 'pending'
+    | 'planning'
+    | 'running'
+    | 'waiting'
+    | 'review'
+    | 'testing'
+    | 'completed'
+    | 'failed'
+    | 'cancelled';
   agent?: Agent;
   parentId?: string;
   subtasks?: Task[];

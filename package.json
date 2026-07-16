@@ -3,21 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "description": "Multi-Agent CLI - Intelligent Orchestration of AI Agents",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "dev:frontend": "npm run dev --workspace=@orion/frontend",
     "dev:landing": "npm run dev --workspace=@orion/landing",
     "dev:backend": "npm run dev --workspace=@orion/backend",
-    "lint": "turbo run lint",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
     "test": "turbo run test",
     "clean": "turbo run clean",
     "typecheck": "turbo run typecheck",
-    "format": "prettier --write \"**/*.{ts,tsx,js,cjs,json,md}\"",
     "db:migrate": "npm run db:migrate --workspace=@orion/infrastructure",
     "db:generate": "npm run db:generate --workspace=@orion/infrastructure",
     "docker:up": "docker-compose up -d",
@@ -25,10 +25,7 @@
     "docker:build": "docker-compose up -d --build"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.3.0",
+    "@biomejs/biome": "^1.8.0",
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   },

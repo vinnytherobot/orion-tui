@@ -1,5 +1,5 @@
-import { type Result, ok, fail, AppError } from "@orion/shared";
-import { AgentStatus } from "../value-objects/AgentStatus.js";
+import { AppError, type Result, fail, ok } from '@orion/shared';
+import { AgentStatus } from '../value-objects/AgentStatus.js';
 
 export interface AgentProps {
   id: string;
@@ -66,7 +66,7 @@ export class Agent {
 
   assignTask(taskId: string): Result<void, AppError> {
     if (!this.props.status.isIdle()) {
-      return fail(AppError.conflict("Agent is not idle"));
+      return fail(AppError.conflict('Agent is not idle'));
     }
     this.props.currentTaskId = taskId;
     this.props.status = AgentStatus.running();
@@ -76,7 +76,7 @@ export class Agent {
 
   completeTask(): Result<void, AppError> {
     if (!this.props.status.isRunning()) {
-      return fail(AppError.conflict("Agent is not running a task"));
+      return fail(AppError.conflict('Agent is not running a task'));
     }
     this.props.currentTaskId = null;
     this.props.status = AgentStatus.completed();

@@ -1,12 +1,12 @@
-import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import Fastify from 'fastify';
 import { buildDeps } from './container.js';
-import { makeAuthService } from './services/auth.service.js';
+import { env } from './env.js';
+import { agentRoutes } from './routes/agent.routes.js';
 import { authRoutes } from './routes/auth.routes.js';
 import { projectRoutes } from './routes/project.routes.js';
 import { taskRoutes } from './routes/task.routes.js';
-import { agentRoutes } from './routes/agent.routes.js';
-import { env } from './env.js';
+import { makeAuthService } from './services/auth.service.js';
 
 // Extend Fastify types
 declare module 'fastify' {
@@ -39,8 +39,13 @@ async function main(): Promise<void> {
     const apiKey = request.headers['x-api-key'] as string;
 
     // Skip auth for public routes
-    const publicRoutes = ['/api/auth/login', '/api/auth/register', '/api/auth/refresh', '/api/health'];
-    if (publicRoutes.some(route => request.url.startsWith(route))) {
+    const publicRoutes = [
+      '/api/auth/login',
+      '/api/auth/register',
+      '/api/auth/refresh',
+      '/api/health',
+    ];
+    if (publicRoutes.some((route) => request.url.startsWith(route))) {
       return;
     }
 

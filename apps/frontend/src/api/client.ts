@@ -2,9 +2,9 @@
  * API Client for communicating with Orion Backend
  */
 
+import { resolve } from 'node:path';
 import { config } from 'dotenv';
-import { resolve } from 'path';
-import { loadTokens, saveTokens, clearTokens } from '../utils/tokenStorage.js';
+import { clearTokens, loadTokens, saveTokens } from '../utils/tokenStorage.js';
 
 // Load .env from project root
 config({ path: resolve(import.meta.dirname, '../../../../.env') });
@@ -53,7 +53,14 @@ interface ProjectResponse {
 }
 
 interface ProjectListResponse {
-  projects: Array<{ id: string; name: string; path: string; description?: string; architecture: string; createdAt: string }>;
+  projects: Array<{
+    id: string;
+    name: string;
+    path: string;
+    description?: string;
+    architecture: string;
+    createdAt: string;
+  }>;
 }
 
 interface TaskResponse {
@@ -61,7 +68,15 @@ interface TaskResponse {
 }
 
 interface TaskListResponse {
-  tasks: Array<{ id: string; title: string; description: string; status: string; priority: string; assignedAgent?: string; createdAt: string }>;
+  tasks: Array<{
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    priority: string;
+    assignedAgent?: string;
+    createdAt: string;
+  }>;
 }
 
 interface TaskStatsResponse {
@@ -132,7 +147,7 @@ class ApiClient {
     };
 
     if (this.accessToken) {
-      headers['Authorization'] = `Bearer ${this.accessToken}`;
+      headers.Authorization = `Bearer ${this.accessToken}`;
     }
 
     try {
@@ -144,7 +159,7 @@ class ApiClient {
       if (response.status === 401 && this.refreshToken) {
         const refreshed = await this.refreshTokens();
         if (refreshed) {
-          headers['Authorization'] = `Bearer ${this.accessToken}`;
+          headers.Authorization = `Bearer ${this.accessToken}`;
           const retryResponse = await fetch(`${this.baseUrl}${path}`, {
             ...options,
             headers,
@@ -163,7 +178,9 @@ class ApiClient {
       }
       return { data: data as T };
     } catch (error) {
-      return { error: `Connection failed: ${error instanceof Error ? error.message : 'Unknown error'}` };
+      return {
+        error: `Connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      };
     }
   }
 
@@ -205,7 +222,7 @@ class ApiClient {
       this.setTokens(
         result.data.tokens.accessToken,
         result.data.tokens.refreshToken,
-        result.data.user.id
+        result.data.user.id,
       );
     }
 
@@ -222,7 +239,7 @@ class ApiClient {
       this.setTokens(
         result.data.tokens.accessToken,
         result.data.tokens.refreshToken,
-        result.data.user.id
+        result.data.user.id,
       );
     }
 

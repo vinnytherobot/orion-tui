@@ -26,6 +26,6 @@ export interface OrionConfig {
   defaultProvider: string;
   providers: Record<string, ProviderConfig>;
   agentModels: AgentModelConfig;
-  logLevel?: "debug" | "info" | "warn" | "error";
+  logLevel?: 'debug' | 'info' | 'warn' | 'error';
   maxConcurrentAgents?: number;
 }

@@ -1,5 +1,5 @@
-import { randomUUID } from 'crypto';
-import { UserRepository, ApiKeyRepository, RefreshTokenRepository } from '@orion/infrastructure';
+import { randomUUID } from 'node:crypto';
+import { ApiKeyRepository, RefreshTokenRepository, UserRepository } from '@orion/infrastructure';
 import bcrypt from 'bcryptjs';
 
 export type AppDeps = {

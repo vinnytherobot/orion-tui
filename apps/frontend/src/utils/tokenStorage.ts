@@ -1,6 +1,6 @@
-import { join } from 'path';
-import { homedir } from 'os';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 
 const ORION_DIR = join(homedir(), '.orion');
 const AUTH_FILE = join(ORION_DIR, 'auth.json');

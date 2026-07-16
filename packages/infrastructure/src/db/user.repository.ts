@@ -6,12 +6,20 @@ export class UserRepository {
   private db = getDatabase();
 
   async findById(id: string): Promise<User | null> {
-    const result = await this.db.select().from(schema.users).where(eq(schema.users.id, id)).limit(1);
+    const result = await this.db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.id, id))
+      .limit(1);
     return result[0] || null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const result = await this.db.select().from(schema.users).where(eq(schema.users.email, email)).limit(1);
+    const result = await this.db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.email, email))
+      .limit(1);
     return result[0] || null;
   }
 
