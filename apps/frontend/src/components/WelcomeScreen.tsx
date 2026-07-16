@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Text } from "ink";
-import { ORION_BANNER, ORION_VERSION } from "../utils/ascii-logo.js";
+import { ORION_BANNER, ORION_TAGLINE, ORION_VERSION } from "../utils/ascii-logo.js";
+import { apiClient } from "../api/client.js";
 
 interface WelcomeScreenProps {
   model?: string;
@@ -14,67 +15,45 @@ export function WelcomeScreen({
   tips,
 }: WelcomeScreenProps): React.ReactElement {
   const defaultTips = [
-    'Type /help to see available commands',
-    "Use Tab to autocomplete commands",
-    'Press Escape to cancel current operation',
-    "Type /config to customize settings",
+    '/help - Show available commands',
+    '/init - Analyze current project',
+    '/implement <task> - Start coding',
+    '/exit - Quit Orion CLI',
   ];
 
   const displayTips = tips || defaultTips;
 
   return (
-    <Box flexDirection="column" padding={1}>
-      <Box marginBottom={1}>
+    <Box flexDirection="column" paddingX={1}>
+      <Box flexDirection="column" alignItems="center" marginBottom={1}>
         <Text color="cyan" bold>
           {ORION_BANNER}
         </Text>
-      </Box>
-
-      <Box marginBottom={1} flexDirection="column">
-        <Text bold color="green">
-          Welcome to Orion CLI!
-        </Text>
-        <Text color="gray">
-          Your multi-agent code orchestration assistant
-        </Text>
+        <Text color="gray">{ORION_TAGLINE} v{ORION_VERSION}</Text>
       </Box>
 
       <Box
-        borderStyle="round"
-        borderColor="yellow"
+        borderStyle="single"
+        borderColor="gray"
         paddingX={1}
         flexDirection="column"
-        marginBottom={1}
       >
         <Text bold color="yellow">
-          Quick Tips
+          Quick Start
         </Text>
         {displayTips.map((tip, index) => (
           <Text key={index} color="white">
-            {"  "}- {tip}
+            {tip}
           </Text>
         ))}
-      </Box>
-
-      <Box
-        borderStyle="round"
-        borderColor="blue"
-        paddingX={1}
-        flexDirection="column"
-        marginBottom={1}
-      >
-        <Text bold color="blue">
-          What's New in v{ORION_VERSION}
-        </Text>
-        <Text color="white">- Multi-agent orchestration system</Text>
-        <Text color="white">- Specialized agent roles</Text>
-        <Text color="white">- Task tracking and management</Text>
-      </Box>
-
-      <Box borderStyle="round" borderColor="gray" paddingX={1}>
         <Text color="gray">
-          Model: {model} │ Directory: {directory}
+          Model: {model} | Dir: {directory}
         </Text>
+        {apiClient.isAuthenticated() && (
+          <Box marginTop={1}>
+            <Text color="green">✓ Logged in (persistent session)</Text>
+          </Box>
+        )}
       </Box>
     </Box>
   );
