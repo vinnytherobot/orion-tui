@@ -1,4 +1,8 @@
-# Orion TUI
+<p align="center">
+  <img src="logo.svg" alt="Orion Logo" width="120" />
+</p>
+
+<h1 align="center">Orion TUI</h1>
 
 <p align="center">
   <strong>Multi-Agent TUI - Intelligent Orchestration of AI Agents</strong>

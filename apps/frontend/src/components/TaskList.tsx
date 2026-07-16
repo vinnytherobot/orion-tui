@@ -32,8 +32,8 @@ const DEMO_TASKS: Task[] = [
 
 export function TaskList({ tasks = DEMO_TASKS }: TaskListProps): React.ReactElement {
   return (
-    <Box flexDirection="column" borderStyle="single" borderColor="blue" paddingX={1}>
-      <Text bold color="blue">
+    <Box flexDirection="column" borderStyle="single" borderColor="magenta" paddingX={1}>
+      <Text bold color="magenta">
         Tasks
       </Text>
       {tasks.map((task) => (

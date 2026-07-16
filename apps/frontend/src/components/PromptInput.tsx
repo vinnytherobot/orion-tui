@@ -107,7 +107,7 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
   return (
     <Box flexDirection="column">
       <Box>
-        <Text color="cyan" bold>
+        <Text color="magenta" bold>
           {'> '}
         </Text>
         <TextInput
@@ -122,7 +122,7 @@ export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement 
           {suggestions.slice(0, 8).map((suggestion, index) => (
             <Text
               key={suggestion}
-              color={index === selectedIndex ? 'cyan' : 'gray'}
+              color={index === selectedIndex ? 'magenta' : 'gray'}
               inverse={index === selectedIndex}
             >
               {index === selectedIndex ? '> ' : '  '}

@@ -13,9 +13,9 @@ const ROLE_LABELS: Record<Message['role'], string> = {
 };
 
 const ROLE_COLORS: Record<Message['role'], string> = {
-  user: 'cyan',
+  user: 'magenta',
   assistant: 'green',
-  system: 'yellow',
+  system: 'magenta',
 };
 
 export function MessageHistory({ messages = [] }: MessageHistoryProps): React.ReactElement {

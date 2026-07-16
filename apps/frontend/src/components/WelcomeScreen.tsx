@@ -26,7 +26,7 @@ export function WelcomeScreen({
   return (
     <Box flexDirection="column" paddingX={1}>
       <Box flexDirection="column" alignItems="center" marginBottom={1}>
-        <Text color="cyan" bold>
+        <Text color="magenta" bold>
           {ORION_BANNER}
         </Text>
         <Text color="gray">
@@ -35,7 +35,7 @@ export function WelcomeScreen({
       </Box>
 
       <Box borderStyle="single" borderColor="gray" paddingX={1} flexDirection="column">
-        <Text bold color="yellow">
+        <Text bold color="magenta">
           Quick Start
         </Text>
         {displayTips.map((tip, index) => (

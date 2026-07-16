@@ -24,8 +24,8 @@ const DEMO_AGENTS: Agent[] = [
 
 export function AgentPanel({ agents = DEMO_AGENTS }: AgentPanelProps): React.ReactElement {
   return (
-    <Box flexDirection="column" borderStyle="single" borderColor="green" paddingX={1}>
-      <Text bold color="green">
+    <Box flexDirection="column" borderStyle="single" borderColor="magenta" paddingX={1}>
+      <Text bold color="magenta">
         Agents
       </Text>
       {agents.map((agent) => (
@@ -33,7 +33,7 @@ export function AgentPanel({ agents = DEMO_AGENTS }: AgentPanelProps): React.Rea
           <Text color={getStatusColor(agent.status)}>● </Text>
           <Text bold>{agent.name}</Text>
           <Text color="gray"> ({agent.role})</Text>
-          {agent.currentTaskId && <Text color="yellow"> → {agent.currentTaskId}</Text>}
+          {agent.currentTaskId && <Text color="magenta"> → {agent.currentTaskId}</Text>}
         </Box>
       ))}
     </Box>
@@ -43,9 +43,9 @@ export function AgentPanel({ agents = DEMO_AGENTS }: AgentPanelProps): React.Rea
 function getStatusColor(status: AgentStatusValue): string {
   switch (status) {
     case 'running':
-      return 'yellow';
+      return 'magenta';
     case 'waiting':
-      return 'yellow';
+      return 'magenta';
     case 'failed':
       return 'red';
     case 'completed':

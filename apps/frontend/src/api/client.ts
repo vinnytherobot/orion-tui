@@ -140,6 +140,22 @@ class ApiClient {
     clearTokens();
   }
 
+  private formatError(raw: unknown): string {
+    if (typeof raw === 'string') return raw;
+    if (Array.isArray(raw)) {
+      return raw
+        .map((issue: { path?: string[]; message?: string }) => {
+          const field = issue.path?.join('.') || '';
+          return field ? `${field}: ${issue.message}` : issue.message || 'Validation error';
+        })
+        .join('; ');
+    }
+    if (raw && typeof raw === 'object' && 'message' in raw) {
+      return String((raw as { message: unknown }).message);
+    }
+    return 'Request failed';
+  }
+
   private async request<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -166,7 +182,7 @@ class ApiClient {
           });
           const retryData = (await retryResponse.json()) as Record<string, unknown>;
           if (!retryResponse.ok) {
-            return { error: (retryData.error as string) || 'Request failed' };
+            return { error: this.formatError(retryData.error) };
           }
           return { data: retryData as T };
         }
@@ -174,7 +190,7 @@ class ApiClient {
 
       const data = (await response.json()) as Record<string, unknown>;
       if (!response.ok) {
-        return { error: (data.error as string) || 'Request failed' };
+        return { error: this.formatError(data.error) };
       }
       return { data: data as T };
     } catch (error) {
