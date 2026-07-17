@@ -8,7 +8,10 @@ import {
   ApiKeyDomainRepository,
   RefreshTokenDomainRepository,
   ProjectDomainRepository,
-  OllamaProvider,
+  createProvider,
+  getCurrentProvider,
+  getProviderApiKey,
+  getProviderInfo,
   AgentExecutor,
   Orchestrator,
   InMemoryEventBus,
@@ -21,8 +24,8 @@ import {
   AuthUseCase,
   ProjectUseCase,
 } from '@orion/application';
-import type { ILLMProvider } from '@orion/infrastructure';
 import type { IJWTProviderPort } from '@orion/application';
+import { makeProviderService, type ProviderService } from './services/provider.service.js';
 
 export type AppDeps = {
   planUseCase: PlanUseCase;
@@ -33,17 +36,10 @@ export type AppDeps = {
   orchestrator: Orchestrator;
   taskRepository: TaskRepository;
   agentRepository: AgentRepository;
+  providerService: ProviderService;
   generateId: () => string;
   now: () => Date;
 };
-
-function createLLMProvider(): ILLMProvider {
-  return new OllamaProvider({
-    apiKey: 'ollama',
-    baseUrl: process.env.OLLAMA_URL || 'http://localhost:11434',
-    model: process.env.OLLAMA_MODEL || 'llama3',
-  });
-}
 
 function createJWTProvider(secret: string): IJWTProviderPort {
   return {
@@ -106,8 +102,20 @@ export function buildDeps(jwtSecret: string): AppDeps {
   const refreshTokenRepository = new RefreshTokenDomainRepository();
   const eventBus = new InMemoryEventBus();
   const unitOfWork = createUnitOfWork();
-  const llmProvider = createLLMProvider();
+  
+  // Load saved provider config
+  const savedProviderName = getCurrentProvider();
+  const savedApiKey = getProviderApiKey(savedProviderName);
+  const providerInfo = getProviderInfo(savedProviderName);
+  
+  const llmProvider = createProvider(savedProviderName, {
+    apiKey: savedApiKey || 'ollama',
+    baseUrl: providerInfo?.defaultBaseUrl || 'http://127.0.0.1:11434',
+    model: providerInfo?.defaultModel || 'llama3',
+  });
+  
   const agentExecutor = new AgentExecutor(llmProvider);
+  const providerService = makeProviderService({ agentExecutor });
   const jwtProvider = createJWTProvider(jwtSecret);
 
   const planUseCase = new PlanUseCase(taskRepository, unitOfWork);
@@ -148,6 +156,7 @@ export function buildDeps(jwtSecret: string): AppDeps {
     orchestrator,
     taskRepository,
     agentRepository,
+    providerService,
     generateId,
     now,
   };

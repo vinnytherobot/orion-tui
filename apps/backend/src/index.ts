@@ -6,6 +6,7 @@ import { agentRoutes } from './routes/agent.routes.js';
 import { authRoutes } from './routes/auth.routes.js';
 import { orchestrationRoutes } from './routes/orchestration.routes.js';
 import { projectRoutes } from './routes/project.routes.js';
+import { providerRoutes } from './routes/provider.routes.js';
 import { taskRoutes } from './routes/task.routes.js';
 
 declare module 'fastify' {
@@ -79,6 +80,7 @@ async function main(): Promise<void> {
   await fastify.register((instance) => taskRoutes(instance, deps));
   await fastify.register((instance) => agentRoutes(instance, deps));
   await fastify.register((instance) => orchestrationRoutes(instance, deps));
+  await fastify.register((instance) => providerRoutes(instance, deps.providerService));
 
   fastify.get('/api/health', async () => {
     return {
