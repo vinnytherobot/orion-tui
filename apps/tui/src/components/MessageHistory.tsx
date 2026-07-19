@@ -29,7 +29,7 @@ export function MessageHistory({ messages = [] }: MessageHistoryProps): React.Re
   }
 
   return (
-    <Box flexDirection="column" paddingX={1} marginTop={1} gap={1}>
+    <Box flexDirection="column" paddingX={1} marginTop={1} gap={1} flexGrow={1} flexShrink={1} width="100%">
       {messages.map((msg) => {
         const config = ROLE_CONFIG[msg.role];
         return (
@@ -40,6 +40,8 @@ export function MessageHistory({ messages = [] }: MessageHistoryProps): React.Re
             borderColor={theme.surfaceBorder}
             paddingX={1}
             paddingY={0}
+            flexShrink={0}
+            width="100%"
           >
             <Box gap={1} marginBottom={1}>
               <Text color={config.color}>{config.icon}</Text>

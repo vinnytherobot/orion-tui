@@ -22,6 +22,7 @@ export const theme = {
   textBright: '#FFFFFF',
   textDim: '#636E72',
   background: '#0D1117',
+  bashMode: '#E17055',
 };
 
 export const STATUS_COLORS: Record<string, string> = {

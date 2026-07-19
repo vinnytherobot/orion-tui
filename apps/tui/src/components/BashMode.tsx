@@ -7,6 +7,8 @@ import { execCommand, type BashResult } from '../utils/bash.js';
 
 interface BashModeProps {
   onExit: () => void;
+  height?: number;
+  width?: number;
 }
 
 interface BashHistoryEntry {
@@ -14,7 +16,7 @@ interface BashHistoryEntry {
   result: BashResult;
 }
 
-export function BashMode({ onExit }: BashModeProps): React.ReactElement {
+export function BashMode({ onExit, height, width }: BashModeProps): React.ReactElement {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<BashHistoryEntry[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -67,32 +69,34 @@ export function BashMode({ onExit }: BashModeProps): React.ReactElement {
   });
 
   return (
-    <Box flexDirection="column" paddingX={1} paddingY={1}>
-      <Box marginBottom={1}>
+    <Box flexDirection="column" width={width} height={height} overflow="hidden" paddingX={1}>
+      <Box flexShrink={0} marginBottom={1}>
         <Text color={theme.warning} bold>
           [BASH MODE] Press ! or type "exit" to return
         </Text>
       </Box>
 
-      {history.map((entry, index) => (
-        <Box key={index} flexDirection="column" marginBottom={1}>
-          <Box gap={1}>
-            <Text color={theme.secondary}>$</Text>
-            <Text color={theme.text}>{entry.command}</Text>
+      <Box flexDirection="column" flexGrow={1} flexShrink={1} overflowY="hidden">
+        {history.map((entry, index) => (
+          <Box key={index} flexDirection="column" marginBottom={1} flexShrink={0}>
+            <Box gap={1}>
+              <Text color={theme.secondary}>$</Text>
+              <Text color={theme.text}>{entry.command}</Text>
+            </Box>
+            {entry.result.stdout && (
+              <Text color={theme.textDim}>{entry.result.stdout}</Text>
+            )}
+            {entry.result.stderr && (
+              <Text color={theme.error}>{entry.result.stderr}</Text>
+            )}
+            {entry.result.exitCode !== 0 && !entry.result.stderr && (
+              <Text color={theme.error}>Exit code: {entry.result.exitCode}</Text>
+            )}
           </Box>
-          {entry.result.stdout && (
-            <Text color={theme.textDim}>{entry.result.stdout}</Text>
-          )}
-          {entry.result.stderr && (
-            <Text color={theme.error}>{entry.result.stderr}</Text>
-          )}
-          {entry.result.exitCode !== 0 && !entry.result.stderr && (
-            <Text color={theme.error}>Exit code: {entry.result.exitCode}</Text>
-          )}
-        </Box>
-      ))}
+        ))}
+      </Box>
 
-      <Box>
+      <Box flexShrink={0}>
         <Text color={theme.secondary}>$ </Text>
         <TextInput
           value={input}

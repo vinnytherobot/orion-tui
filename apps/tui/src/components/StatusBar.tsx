@@ -18,6 +18,7 @@ export function StatusBar({
       paddingX={1}
       justifyContent="space-between"
       marginTop={1}
+      width="100%"
     >
       <Box gap={1}>
         <Text color={theme.textDim}>⌘</Text>

@@ -25,8 +25,8 @@ export function WelcomeScreen({
   const displayTips = tips || defaultTips;
 
   return (
-    <Box flexDirection="column" paddingX={1} marginBottom={1}>
-      <Box flexDirection="column" alignItems="center">
+    <Box flexDirection="column" paddingX={1} marginBottom={1} width="100%">
+      <Box flexDirection="column" alignItems="center" width="100%">
         <Text color="#6C5CE7">{ORION_BANNER}</Text>
         <Box gap={1} marginTop={-1} marginBottom={1}>
           <Text color={theme.textDim}>{ORION_TAGLINE}</Text>
@@ -34,7 +34,7 @@ export function WelcomeScreen({
         </Box>
       </Box>
 
-      <Box borderStyle="round" borderColor={theme.surfaceBorderLight} paddingX={1} paddingY={0} flexDirection="column">
+      <Box borderStyle="round" borderColor={theme.surfaceBorderLight} paddingX={1} paddingY={0} flexDirection="column" width="100%">
         <Box gap={1} marginBottom={1}>
           <Text bold color={theme.secondary}>❯ Quick Start</Text>
         </Box>

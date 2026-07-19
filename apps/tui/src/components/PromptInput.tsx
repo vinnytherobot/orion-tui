@@ -7,20 +7,31 @@ import { getCommandSuggestions } from '../utils/commands.js';
 
 interface PromptInputProps {
   onSubmit: (input: string) => void;
-  onToggleBash?: () => void;
 }
 
-export function PromptInput({ onSubmit, onToggleBash }: PromptInputProps): React.ReactElement {
+export function PromptInput({ onSubmit }: PromptInputProps): React.ReactElement {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [tempInput, setTempInput] = useState('');
+  const [isBashMode, setIsBashMode] = useState(false);
 
   const handleChange = (value: string) => {
     setInput(value);
     setHistoryIndex(-1);
+
+    if (value.startsWith('!')) {
+      setIsBashMode(true);
+      setSuggestions([]);
+      setSelectedIndex(0);
+      return;
+    }
+
+    if (isBashMode && !value.startsWith('!')) {
+      setIsBashMode(false);
+    }
 
     if (value.startsWith('/')) {
       const matches = getCommandSuggestions(value);
@@ -49,6 +60,9 @@ export function PromptInput({ onSubmit, onToggleBash }: PromptInputProps): React
     setSelectedIndex(0);
     setHistoryIndex(-1);
     setTempInput('');
+    if (isBashMode) {
+      setIsBashMode(false);
+    }
   };
 
   useInput((_inputChar, key) => {
@@ -99,8 +113,9 @@ export function PromptInput({ onSubmit, onToggleBash }: PromptInputProps): React
       setSuggestions([]);
     }
 
-    if (_inputChar === '!' && !input) {
-      onToggleBash?.();
+    if (key.escape && isBashMode) {
+      setIsBashMode(false);
+      setInput('');
       return;
     }
   });
@@ -108,17 +123,21 @@ export function PromptInput({ onSubmit, onToggleBash }: PromptInputProps): React
   const showHistoryHint =
     history.length > 0 && historyIndex === -1 && suggestions.length === 0 && !input;
 
+  const promptColor = isBashMode ? theme.bashMode : theme.secondary;
+  const promptSymbol = isBashMode ? '$' : '❯';
+  const borderColor = isBashMode ? theme.bashMode : theme.surfaceBorder;
+
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={theme.surfaceBorder} paddingX={1}>
-      <Box>
-        <Text color={theme.secondary} bold>
-          {'❯ '}
+    <Box flexDirection="column" borderStyle="round" borderColor={borderColor} paddingX={1} width="100%">
+      <Box width="100%">
+        <Text color={promptColor} bold>
+          {promptSymbol + ' '}
         </Text>
         <TextInput
           value={input}
           onChange={handleChange}
           onSubmit={handleSubmit}
-          placeholder="Type a command or message..."
+          placeholder={isBashMode ? 'Type a shell command...' : 'Type a command or message...'}
         />
       </Box>
       {suggestions.length > 0 && (

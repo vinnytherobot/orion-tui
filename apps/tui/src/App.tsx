@@ -1,7 +1,6 @@
 import { Box, useApp } from 'ink';
 import type React from 'react';
 import { useCallback, useState } from 'react';
-import { BashMode } from './components/BashMode.js';
 import { InputPrompt } from './components/InputPrompt.js';
 import { MessageHistory } from './components/MessageHistory.js';
 import { PromptInput } from './components/PromptInput.js';
@@ -10,19 +9,21 @@ import { StatusBar } from './components/StatusBar.js';
 import { WelcomeScreen } from './components/WelcomeScreen.js';
 import type { Agent, InteractiveCommand, Message, Task } from './types/index.js';
 import { executeCommand } from './utils/commands.js';
+import { execCommand } from './utils/bash.js';
 
 interface AppProps {
   model?: string;
   agentCount?: number;
+  height?: number;
+  width?: number;
 }
 
-export function App({ model = 'not-set', agentCount = 0 }: AppProps): React.ReactElement {
+export function App({ model = 'not-set', agentCount = 0, height, width }: AppProps): React.ReactElement {
   const { exit } = useApp();
   const [messages, setMessages] = useState<Message[]>([]);
   const [agents] = useState<Agent[]>([]);
   const [_tasks] = useState<Task[]>([]);
   const [interactiveMenu, setInteractiveMenu] = useState<InteractiveCommand | null>(null);
-  const [isBashMode, setIsBashMode] = useState(false);
 
   const activeAgentCount = agents.filter((a) => a.status === 'running').length;
 
@@ -74,18 +75,26 @@ export function App({ model = 'not-set', agentCount = 0 }: AppProps): React.Reac
     addMessage('system', 'Cancelled.');
   }, [addMessage]);
 
-  const toggleBashMode = useCallback(() => {
-    setIsBashMode(prev => !prev);
-  }, []);
-
-  const exitBashMode = useCallback(() => {
-    setIsBashMode(false);
-  }, []);
-
   const handleSubmit = useCallback(
     async (input: string) => {
       const trimmed = input.trim();
       if (!trimmed) return;
+
+      if (trimmed.startsWith('!')) {
+        const cmd = trimmed.slice(1).trim();
+        if (!cmd) return;
+
+        addMessage('user', trimmed);
+
+        const result = await execCommand(cmd);
+        let output = '';
+        if (result.stdout) output += result.stdout;
+        if (result.stderr) output += (output ? '\n' : '') + result.stderr;
+        if (result.exitCode !== 0 && !result.stderr) output += (output ? '\n' : '') + `Exit code: ${result.exitCode}`;
+
+        addMessage('system', output || '(no output)');
+        return;
+      }
 
       if (trimmed.startsWith('/')) {
         const result = await executeCommand(trimmed);
@@ -126,44 +135,61 @@ export function App({ model = 'not-set', agentCount = 0 }: AppProps): React.Reac
   if (interactiveMenu) {
     if (interactiveMenu.type === 'select') {
       return (
-        <Box flexDirection="column">
-          <WelcomeScreen model={model} directory={process.cwd()} />
-          <SelectMenu
-            title={interactiveMenu.title}
-            options={interactiveMenu.options}
-            onSelect={handleInteractiveSelect}
-            onCancel={handleInteractiveCancel}
-          />
+        <Box flexDirection="column" width={width} height={height} overflow="hidden">
+          <Box flexShrink={0} width="100%">
+            <WelcomeScreen model={model} directory={process.cwd()} />
+          </Box>
+          <Box flexGrow={1} flexShrink={1} overflowY="hidden" width="100%">
+            <SelectMenu
+              title={interactiveMenu.title}
+              options={interactiveMenu.options}
+              onSelect={handleInteractiveSelect}
+              onCancel={handleInteractiveCancel}
+            />
+          </Box>
         </Box>
       );
     }
 
     if (interactiveMenu.type === 'input') {
       return (
-        <Box flexDirection="column">
-          <WelcomeScreen model={model} directory={process.cwd()} />
-          <InputPrompt
-            title={interactiveMenu.title}
-            placeholder={interactiveMenu.placeholder}
-            masked={interactiveMenu.masked}
-            onSubmit={handleInteractiveInput}
-            onCancel={handleInteractiveCancel}
-          />
+        <Box flexDirection="column" width={width} height={height} overflow="hidden">
+          <Box flexShrink={0} width="100%">
+            <WelcomeScreen model={model} directory={process.cwd()} />
+          </Box>
+          <Box flexGrow={1} flexShrink={1} overflowY="hidden" width="100%">
+            <InputPrompt
+              title={interactiveMenu.title}
+              placeholder={interactiveMenu.placeholder}
+              masked={interactiveMenu.masked}
+              onSubmit={handleInteractiveInput}
+              onCancel={handleInteractiveCancel}
+            />
+          </Box>
         </Box>
       );
     }
   }
 
-  if (isBashMode) {
-    return <BashMode onExit={exitBashMode} />;
-  }
-
   return (
-    <Box flexDirection="column" paddingX={1} paddingY={1}>
-      <WelcomeScreen model={model} directory={process.cwd()} />
-      {messages.length > 0 && <MessageHistory messages={messages} />}
-      <PromptInput onSubmit={handleSubmit} onToggleBash={toggleBashMode} />
-      <StatusBar model={model} agentCount={activeAgentCount || agentCount} />
+    <Box
+      flexDirection="column"
+      width={width}
+      height={height}
+      overflow="hidden"
+    >
+      <Box flexShrink={0} width="100%">
+        <WelcomeScreen model={model} directory={process.cwd()} />
+      </Box>
+      <Box flexGrow={1} flexShrink={1} overflowY="hidden" flexDirection="column" width="100%">
+        {messages.length > 0 && <MessageHistory messages={messages} />}
+      </Box>
+      <Box flexShrink={0} width="100%">
+        <PromptInput onSubmit={handleSubmit} />
+      </Box>
+      <Box flexShrink={0} width="100%">
+        <StatusBar model={model} agentCount={activeAgentCount || agentCount} />
+      </Box>
     </Box>
   );
 }
